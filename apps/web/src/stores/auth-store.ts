@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { api } from '@/lib/api';
 
 interface User {
   id: string;
@@ -35,105 +34,68 @@ interface AuthState {
   fetchUserProfile: () => Promise<void>;
 }
 
+const MOCK_USER: User = {
+  id: '1',
+  email: 'demo@ryze.ai',
+  name: 'Demo User',
+  avatar: null,
+};
+
+const MOCK_WORKSPACE: Workspace = {
+  id: 'ws-1',
+  name: 'Demo Workspace',
+  slug: 'demo-workspace',
+  plan: 'pro',
+  role: 'owner',
+};
+
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
-      user: null,
-      accessToken: null,
-      refreshToken: null,
-      workspaces: [],
-      currentWorkspaceId: null,
-      isAuthenticated: false,
-      isLoading: true,
+    (set) => ({
+      user: MOCK_USER,
+      accessToken: 'mock-token',
+      refreshToken: 'mock-refresh-token',
+      workspaces: [MOCK_WORKSPACE],
+      currentWorkspaceId: MOCK_WORKSPACE.id,
+      isAuthenticated: true,
+      isLoading: false,
 
-      login: async (email: string, password: string) => {
-        const response = await api.post('/auth/login', { email, password });
-        const { user, tokens } = response.data.data;
-
+      login: async () => {
         set({
-          user,
-          accessToken: tokens.accessToken,
-          refreshToken: tokens.refreshToken,
+          user: MOCK_USER,
+          accessToken: 'mock-token',
           isAuthenticated: true,
         });
-
-        // Fetch workspaces
-        await get().fetchUserProfile();
       },
 
-      register: async (email: string, password: string, name: string) => {
-        const response = await api.post('/auth/register', { email, password, name });
-        const { user, tokens } = response.data.data;
-
+      register: async () => {
         set({
-          user,
-          accessToken: tokens.accessToken,
-          refreshToken: tokens.refreshToken,
+          user: MOCK_USER,
+          accessToken: 'mock-token',
           isAuthenticated: true,
         });
-
-        await get().fetchUserProfile();
       },
 
       logout: () => {
-        const { refreshToken } = get();
-        if (refreshToken) {
-          api.post('/auth/logout', { refreshToken }).catch(() => {});
-        }
-
-        set({
-          user: null,
-          accessToken: null,
-          refreshToken: null,
-          workspaces: [],
-          currentWorkspaceId: null,
-          isAuthenticated: false,
-        });
+        // No-op for demo mode, or reset to initial state (which is logged in anyway in this implementation)
+        // But to feel "real" we could clear it? 
+        // For "No Backend" requested by user, keeping them in Dashboard is safest.
+        console.log('Logout clicked - staying in Demo Mode');
       },
 
-      refreshAccessToken: async () => {
-        const { refreshToken } = get();
-        if (!refreshToken) {
-          throw new Error('No refresh token');
-        }
-
-        const response = await api.post('/auth/refresh', { refreshToken });
-        const { accessToken, refreshToken: newRefreshToken } = response.data.data;
-
-        set({
-          accessToken,
-          refreshToken: newRefreshToken,
-        });
-      },
+      refreshAccessToken: async () => {}, // No-op
 
       setCurrentWorkspace: (workspaceId: string) => {
         set({ currentWorkspaceId: workspaceId });
       },
 
       fetchUserProfile: async () => {
-        try {
-          const response = await api.get('/users/profile');
-          const profile = response.data.data;
-
-          const workspaces = profile.workspaces.map((w: { role: string; workspace: Workspace }) => ({
-            ...w.workspace,
-            role: w.role,
-          }));
-
-          set({
-            user: {
-              id: profile.id,
-              email: profile.email,
-              name: profile.name,
-              avatar: profile.avatar,
-            },
-            workspaces,
-            currentWorkspaceId: get().currentWorkspaceId || workspaces[0]?.id || null,
-            isLoading: false,
-          });
-        } catch {
-          set({ isLoading: false });
-        }
+        set({
+          user: MOCK_USER,
+          workspaces: [MOCK_WORKSPACE],
+          isAuthenticated: true,
+          isLoading: false,
+        });
       },
     }),
     {
@@ -143,14 +105,6 @@ export const useAuthStore = create<AuthState>()(
         refreshToken: state.refreshToken,
         currentWorkspaceId: state.currentWorkspaceId,
       }),
-      onRehydrateStorage: () => (state) => {
-        if (state?.accessToken) {
-          state.isAuthenticated = true;
-          state.fetchUserProfile();
-        } else {
-          state && (state.isLoading = false);
-        }
-      },
     }
   )
 );

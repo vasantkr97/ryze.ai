@@ -254,7 +254,7 @@ export function Header({ className, onMenuClick }: HeaderProps) {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               className="cursor-pointer gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
               onClick={() => {
                 logout();
@@ -263,7 +263,8 @@ export function Header({ className, onMenuClick }: HeaderProps) {
             >
               <LogOut className="h-4 w-4" />
               Log out
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
+
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
