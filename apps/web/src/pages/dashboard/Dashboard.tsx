@@ -11,6 +11,8 @@ import {
   BarChart3,
   MessageSquare,
   Settings2,
+  ArrowUpRight,
+  Activity,
 } from 'lucide-react';
 import {
   AreaChart,
@@ -54,6 +56,9 @@ const metrics = [
     trend: 'up',
     icon: TrendingUp,
     description: 'Return on ad spend',
+    color: 'from-emerald-500/20 to-emerald-500/5',
+    iconColor: 'text-emerald-500',
+    borderColor: 'group-hover:border-emerald-500/30',
   },
   {
     title: 'CPA',
@@ -62,6 +67,9 @@ const metrics = [
     trend: 'down',
     icon: Target,
     description: 'Cost per acquisition',
+    color: 'from-blue-500/20 to-blue-500/5',
+    iconColor: 'text-blue-500',
+    borderColor: 'group-hover:border-blue-500/30',
   },
   {
     title: 'CTR',
@@ -70,6 +78,9 @@ const metrics = [
     trend: 'up',
     icon: MousePointer,
     description: 'Click-through rate',
+    color: 'from-violet-500/20 to-violet-500/5',
+    iconColor: 'text-violet-500',
+    borderColor: 'group-hover:border-violet-500/30',
   },
   {
     title: 'Total Spend',
@@ -78,6 +89,9 @@ const metrics = [
     trend: 'up',
     icon: Wallet,
     description: 'Last 30 days',
+    color: 'from-amber-500/20 to-amber-500/5',
+    iconColor: 'text-amber-500',
+    borderColor: 'group-hover:border-amber-500/30',
   },
 ];
 
@@ -119,71 +133,87 @@ const quickActions = [
     description: 'Ask questions about your campaigns',
     icon: MessageSquare,
     href: '/dashboard/chat',
-    color: 'bg-primary/90',
+    gradient: 'from-primary to-primary/80',
   },
   {
     title: 'View Analytics',
     description: 'Deep dive into your metrics',
     icon: BarChart3,
     href: '/dashboard/analytics',
-    color: 'bg-slate-600',
+    gradient: 'from-blue-600 to-blue-500',
   },
   {
     title: 'Automation Rules',
     description: 'Set up auto-optimization',
     icon: Zap,
     href: '/dashboard/automation',
-    color: 'bg-emerald-600/90',
+    gradient: 'from-amber-600 to-amber-500',
   },
   {
     title: 'Settings',
     description: 'Configure your workspace',
     icon: Settings2,
     href: '/dashboard/settings',
-    color: 'bg-slate-500',
+    gradient: 'from-slate-600 to-slate-500',
   },
 ];
 
 export default function Dashboard() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Page Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
+        <div className="space-y-1">
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground">
             Welcome back! Here's an overview of your ad performance.
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="btn-premium w-fit">
           <Link to="/dashboard/chat">
-            <MessageSquare className="mr-2 h-4 w-4" />
+            <Sparkles className="mr-2 h-4 w-4" />
             Ask AI for Insights
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
       </div>
 
       {/* Metric Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {metrics.map((metric) => (
-          <Card key={metric.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
+        {metrics.map((metric, index) => (
+          <Card
+            key={metric.title}
+            className={cn(
+              "group relative overflow-hidden transition-all duration-300 hover:shadow-lg",
+              metric.borderColor
+            )}
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <div className={cn(
+              "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+              metric.color
+            )} />
+            <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 {metric.title}
               </CardTitle>
-              <metric.icon className="h-4 w-4 text-muted-foreground" />
+              <div className={cn(
+                "flex h-8 w-8 items-center justify-center rounded-lg bg-muted/50 transition-colors group-hover:bg-transparent",
+              )}>
+                <metric.icon className={cn("h-4 w-4", metric.iconColor)} />
+              </div>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{metric.value}</div>
-              <p className="text-xs text-muted-foreground">
+            <CardContent className="relative">
+              <div className="text-3xl font-bold tracking-tight">{metric.value}</div>
+              <div className="mt-1 flex items-center gap-2">
                 <span
                   className={cn(
-                    'inline-flex items-center',
+                    'inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-medium',
                     metric.trend === 'up' && metric.title !== 'CPA'
-                      ? 'text-green-600'
+                      ? 'bg-emerald-500/10 text-emerald-500'
                       : metric.trend === 'down' && metric.title === 'CPA'
-                      ? 'text-green-600'
-                      : 'text-red-600'
+                      ? 'bg-emerald-500/10 text-emerald-500'
+                      : 'bg-red-500/10 text-red-500'
                   )}
                 >
                   {metric.trend === 'up' ? (
@@ -193,21 +223,34 @@ export default function Dashboard() {
                   )}
                   {metric.change > 0 ? '+' : ''}
                   {metric.change}%
-                </span>{' '}
-                {metric.description}
-              </p>
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {metric.description}
+                </span>
+              </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
       {/* Performance Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Performance Overview</CardTitle>
-          <CardDescription>
-            ROAS and spend trends over the last 10 weeks
-          </CardDescription>
+      <Card className="overflow-hidden">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5 text-primary" />
+              Performance Overview
+            </CardTitle>
+            <CardDescription>
+              ROAS and spend trends over the last 10 weeks
+            </CardDescription>
+          </div>
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/dashboard/analytics">
+              View Details
+              <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
+            </Link>
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="h-[350px]">
@@ -215,19 +258,21 @@ export default function Dashboard() {
               <AreaChart data={performanceData}>
                 <defs>
                   <linearGradient id="colorRoas" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
                     <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
                 <XAxis
                   dataKey="date"
-                  className="text-xs"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
                   tickLine={false}
                   axisLine={false}
                 />
                 <YAxis
-                  className="text-xs"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(value) => `${value}x`}
@@ -236,15 +281,17 @@ export default function Dashboard() {
                   contentStyle={{
                     backgroundColor: 'hsl(var(--card))',
                     border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px',
+                    borderRadius: '12px',
+                    boxShadow: '0 10px 40px hsl(var(--background) / 0.5)',
                   }}
-                  labelStyle={{ color: 'hsl(var(--foreground))' }}
+                  labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 600 }}
+                  itemStyle={{ color: 'hsl(var(--muted-foreground))' }}
                 />
                 <Area
                   type="monotone"
                   dataKey="roas"
                   stroke="hsl(var(--primary))"
-                  strokeWidth={2}
+                  strokeWidth={3}
                   fillOpacity={1}
                   fill="url(#colorRoas)"
                 />
@@ -261,46 +308,50 @@ export default function Dashboard() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>AI Recommendations</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  AI Recommendations
+                </CardTitle>
                 <CardDescription>
                   Latest suggestions to improve performance
                 </CardDescription>
               </div>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/dashboard/recommendations">
+                <Link to="/dashboard/recommendations" className="group">
                   View All
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             {recommendations.map((rec) => (
               <div
                 key={rec.id}
-                className="flex items-start gap-4 rounded-lg border p-4 transition-colors hover:bg-muted/50"
+                className="group flex items-start gap-4 rounded-xl border border-border/50 bg-muted/20 p-4 transition-all duration-200 hover:border-primary/30 hover:bg-muted/40"
               >
                 <div
                   className={cn(
-                    'rounded-lg p-2',
+                    'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors',
                     rec.priority === 'high'
-                      ? 'bg-red-500/10 text-red-400'
+                      ? 'bg-red-500/10 text-red-400 group-hover:bg-red-500/20'
                       : rec.priority === 'medium'
-                      ? 'bg-amber-500/10 text-amber-400'
-                      : 'bg-primary/10 text-primary'
+                      ? 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20'
+                      : 'bg-primary/10 text-primary group-hover:bg-primary/20'
                   )}
                 >
-                  <rec.icon className="h-4 w-4" />
+                  <rec.icon className="h-5 w-5" />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <p className="font-medium leading-none">{rec.title}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="font-medium leading-tight">{rec.title}</p>
+                  <p className="text-sm text-muted-foreground line-clamp-2">
                     {rec.description}
                   </p>
-                  <p className="text-sm font-medium text-primary">
+                  <p className="text-sm font-semibold text-primary">
                     {rec.impact}
                   </p>
                 </div>
+                <ArrowUpRight className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
               </div>
             ))}
           </CardContent>
@@ -309,29 +360,36 @@ export default function Dashboard() {
         {/* Quick Actions */}
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-amber-500" />
+              Quick Actions
+            </CardTitle>
             <CardDescription>
               Common tasks and shortcuts
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-2">
+          <CardContent className="grid gap-3 sm:grid-cols-2">
             {quickActions.map((action) => (
               <Link
                 key={action.title}
                 to={action.href}
-                className="group flex items-start gap-4 rounded-lg border p-4 transition-all hover:border-primary hover:shadow-md"
+                className="group relative flex items-start gap-4 rounded-xl border border-border/50 bg-muted/20 p-4 transition-all duration-300 hover:border-primary/30 hover:shadow-lg overflow-hidden"
               >
-                <div className={cn('rounded-lg p-2 text-white', action.color)}>
+                <div className={cn(
+                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-lg transition-transform group-hover:scale-110",
+                  action.gradient
+                )}>
                   <action.icon className="h-5 w-5" />
                 </div>
                 <div className="space-y-1">
-                  <p className="font-medium group-hover:text-primary">
+                  <p className="font-medium group-hover:text-primary transition-colors">
                     {action.title}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {action.description}
                   </p>
                 </div>
+                <ArrowUpRight className="absolute top-4 right-4 h-4 w-4 text-muted-foreground opacity-0 transition-all group-hover:opacity-100" />
               </Link>
             ))}
           </CardContent>

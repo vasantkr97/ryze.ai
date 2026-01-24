@@ -131,6 +131,38 @@ const attributionData = [
   { channel: 'Referral', firstTouch: 12, lastTouch: 4, linear: 8, contribution: 40000 },
 ];
 
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="glass-card rounded-xl p-4 shadow-xl animate-in fade-in slide-in-from-bottom-2">
+        <div className="flex items-center gap-2 mb-2">
+          <div
+            className="w-3 h-3 rounded-full shadow-sm"
+            style={{ backgroundColor: data.fill }}
+          />
+          <p className="font-semibold text-foreground text-sm">{data.name}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-2xl font-bold tracking-tight">
+            {new Intl.NumberFormat('en-US', { notation: "compact", compactDisplay: "short" }).format(data.value)}
+            <span className="text-xs font-normal text-muted-foreground ml-1">users</span>
+          </p>
+          {data.conversionRate && (
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <span className="text-green-500 font-medium">{data.conversionRate}%</span> conversion rate
+            </p>
+          )}
+          <p className="text-xs text-muted-foreground mt-2 pt-2 border-t border-border/50">
+            {data.description}
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function Journeys() {
   const formatNumber = (value: number) => {
     if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
@@ -237,14 +269,7 @@ export default function Journeys() {
           <div className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <FunnelChart>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px',
-                  }}
-                  formatter={(value: number) => [formatNumber(value) + ' users', '']}
-                />
+                <Tooltip content={<CustomTooltip />} />
                 <Funnel
                   dataKey="value"
                   data={journeyStages}
@@ -288,7 +313,7 @@ export default function Journeys() {
             {journeyStages.map((stage, index) => (
               <div
                 key={stage.name}
-                className="flex flex-col gap-4 rounded-lg border p-4 lg:flex-row lg:items-center"
+                className="flex flex-col gap-4 rounded-lg border p-4 lg:flex-row lg:items-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 cursor-default bg-card/50 hover:bg-card"
               >
                 <div className="flex items-center gap-4 lg:w-1/4">
                   <div
@@ -357,11 +382,11 @@ export default function Journeys() {
               <div
                 key={index}
                 className={cn(
-                  'rounded-lg border p-4',
-                  insight.impact === 'high' && 'border-l-4 border-l-red-500',
-                  insight.impact === 'medium' && 'border-l-4 border-l-amber-500',
-                  insight.impact === 'opportunity' && 'border-l-4 border-l-green-500',
-                  insight.impact === 'insight' && 'border-l-4 border-l-blue-500'
+                  'rounded-lg border p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-default',
+                  insight.impact === 'high' && 'border-l-4 border-l-red-500 hover:bg-red-500/5',
+                  insight.impact === 'medium' && 'border-l-4 border-l-amber-500 hover:bg-amber-500/5',
+                  insight.impact === 'opportunity' && 'border-l-4 border-l-green-500 hover:bg-green-500/5',
+                  insight.impact === 'insight' && 'border-l-4 border-l-blue-500 hover:bg-blue-500/5'
                 )}
               >
                 <div className="flex items-start justify-between gap-2">

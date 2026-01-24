@@ -12,13 +12,13 @@ import {
   Copy,
   ThumbsUp,
   ThumbsDown,
-  MoreVertical,
   Mic,
   Paperclip,
   ArrowDown,
+  Check,
+  Zap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 interface Message {
@@ -35,21 +35,29 @@ const suggestedPrompts = [
     icon: TrendingUp,
     text: 'How can I improve my ROAS?',
     category: 'optimization',
+    gradient: 'from-emerald-500/20 to-emerald-500/5',
+    iconColor: 'text-emerald-500',
   },
   {
     icon: AlertCircle,
     text: 'Which campaigns are wasting spend?',
     category: 'analysis',
+    gradient: 'from-red-500/20 to-red-500/5',
+    iconColor: 'text-red-500',
   },
   {
     icon: Target,
     text: 'What audiences should I target?',
     category: 'targeting',
+    gradient: 'from-blue-500/20 to-blue-500/5',
+    iconColor: 'text-blue-500',
   },
   {
     icon: Lightbulb,
     text: 'Give me creative ideas for my ads',
     category: 'creative',
+    gradient: 'from-amber-500/20 to-amber-500/5',
+    iconColor: 'text-amber-500',
   },
 ];
 
@@ -208,8 +216,10 @@ What would you like to explore today?`,
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -254,7 +264,7 @@ What would you like to explore today?`,
     setMessages((prev) => [...prev, aiResponse]);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage(inputValue);
@@ -273,6 +283,12 @@ What would you like to explore today?`,
     );
   };
 
+  const handleCopy = async (messageId: string, content: string) => {
+    await navigator.clipboard.writeText(content);
+    setCopiedId(messageId);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
@@ -280,24 +296,27 @@ What would you like to explore today?`,
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col">
       {/* Chat Header */}
-      <div className="flex items-center justify-between border-b pb-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/90">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+      <div className="flex items-center justify-between border-b border-border/50 pb-4">
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25">
+              <Sparkles className="h-6 w-6 text-primary-foreground" />
+            </div>
+            <div className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-background">
+              <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
+            </div>
           </div>
           <div>
-            <h1 className="text-xl font-semibold">Ryze AI Assistant</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-xl font-semibold tracking-tight">Ryze AI Assistant</h1>
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Zap className="h-3 w-3 text-primary" />
               Your intelligent advertising copilot
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon">
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-muted/50">
             <RefreshCw className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <MoreVertical className="h-4 w-4" />
           </Button>
         </div>
       </div>
@@ -306,37 +325,37 @@ What would you like to explore today?`,
       <div
         ref={messagesContainerRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto py-4"
+        className="flex-1 overflow-y-auto py-6"
       >
         <div className="mx-auto max-w-3xl space-y-6 px-4">
           {messages.map((message) => (
             <div
               key={message.id}
               className={cn(
-                'flex gap-3',
+                'flex gap-4 animate-fade-up',
                 message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
               )}
             >
               {/* Avatar */}
               <div
                 className={cn(
-                  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
+                  'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl shadow-lg',
                   message.role === 'assistant'
-                    ? 'bg-primary/90'
-                    : 'bg-slate-600'
+                    ? 'bg-gradient-to-br from-primary to-primary/80 shadow-primary/20'
+                    : 'bg-gradient-to-br from-slate-600 to-slate-700 shadow-slate-900/20'
                 )}
               >
                 {message.role === 'assistant' ? (
-                  <Bot className="h-4 w-4 text-white" />
+                  <Bot className="h-5 w-5 text-primary-foreground" />
                 ) : (
-                  <User className="h-4 w-4 text-primary-foreground" />
+                  <User className="h-5 w-5 text-white" />
                 )}
               </div>
 
               {/* Message Bubble */}
               <div
                 className={cn(
-                  'group relative max-w-[80%] space-y-2',
+                  'group relative max-w-[85%] space-y-2',
                   message.role === 'user' ? 'items-end' : 'items-start'
                 )}
               >
@@ -344,28 +363,30 @@ What would you like to explore today?`,
                   className={cn(
                     'rounded-2xl px-4 py-3',
                     message.role === 'assistant'
-                      ? 'bg-muted text-foreground'
-                      : 'bg-primary text-primary-foreground'
+                      ? 'bg-muted/50 text-foreground border border-border/50'
+                      : 'bg-gradient-to-br from-primary to-primary/90 text-primary-foreground shadow-lg shadow-primary/20'
                   )}
                 >
                   <div
                     className={cn(
                       'prose prose-sm max-w-none',
-                      message.role === 'user' && 'prose-invert'
+                      message.role === 'user' && 'prose-invert',
+                      message.role === 'assistant' && 'prose-slate dark:prose-invert'
                     )}
                   >
                     {message.content.split('\n').map((line, i) => {
                       // Handle bold text
                       const processedLine = line.replace(
                         /\*\*(.*?)\*\*/g,
-                        '<strong>$1</strong>'
+                        '<strong class="font-semibold text-foreground">$1</strong>'
                       );
                       return (
                         <p
                           key={i}
                           className={cn(
-                            'mb-1 last:mb-0',
-                            line.startsWith('-') && 'ml-4'
+                            'mb-1.5 last:mb-0 leading-relaxed',
+                            line.startsWith('-') && 'ml-4',
+                            line.startsWith('**') && 'mt-3 first:mt-0'
                           )}
                           dangerouslySetInnerHTML={{ __html: processedLine }}
                         />
@@ -377,42 +398,46 @@ What would you like to explore today?`,
                 {/* Message Footer */}
                 <div
                   className={cn(
-                    'flex items-center gap-2 text-xs text-muted-foreground',
+                    'flex items-center gap-2 px-1 text-xs text-muted-foreground',
                     message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
                   )}
                 >
-                  <span>{formatTime(message.timestamp)}</span>
+                  <span className="opacity-70">{formatTime(message.timestamp)}</span>
                   {message.role === 'assistant' && (
-                    <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-6 w-6"
-                        onClick={() => navigator.clipboard.writeText(message.content)}
+                        className="h-7 w-7 rounded-lg hover:bg-muted"
+                        onClick={() => handleCopy(message.id, message.content)}
                       >
-                        <Copy className="h-3 w-3" />
+                        {copiedId === message.id ? (
+                          <Check className="h-3.5 w-3.5 text-emerald-500" />
+                        ) : (
+                          <Copy className="h-3.5 w-3.5" />
+                        )}
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
                         className={cn(
-                          'h-6 w-6',
-                          message.feedback === 'positive' && 'text-green-500'
+                          'h-7 w-7 rounded-lg hover:bg-muted',
+                          message.feedback === 'positive' && 'text-emerald-500 bg-emerald-500/10'
                         )}
                         onClick={() => handleFeedback(message.id, 'positive')}
                       >
-                        <ThumbsUp className="h-3 w-3" />
+                        <ThumbsUp className="h-3.5 w-3.5" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
                         className={cn(
-                          'h-6 w-6',
-                          message.feedback === 'negative' && 'text-red-500'
+                          'h-7 w-7 rounded-lg hover:bg-muted',
+                          message.feedback === 'negative' && 'text-red-500 bg-red-500/10'
                         )}
                         onClick={() => handleFeedback(message.id, 'negative')}
                       >
-                        <ThumbsDown className="h-3 w-3" />
+                        <ThumbsDown className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   )}
@@ -423,15 +448,15 @@ What would you like to explore today?`,
 
           {/* Typing Indicator */}
           {isTyping && (
-            <div className="flex gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/90">
-                <Bot className="h-4 w-4 text-primary-foreground" />
+            <div className="flex gap-4 animate-fade-up">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/20">
+                <Bot className="h-5 w-5 text-primary-foreground" />
               </div>
-              <div className="rounded-2xl bg-muted px-4 py-3">
-                <div className="flex items-center gap-1">
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:-0.3s]" />
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:-0.15s]" />
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/50" />
+              <div className="rounded-2xl bg-muted/50 border border-border/50 px-4 py-3">
+                <div className="flex items-center gap-1.5">
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary/60 [animation-delay:-0.3s]" />
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary/60 [animation-delay:-0.15s]" />
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary/60" />
                 </div>
               </div>
             </div>
@@ -443,37 +468,43 @@ What would you like to explore today?`,
 
       {/* Scroll to Bottom Button */}
       {showScrollButton && (
-        <div className="absolute bottom-32 left-1/2 -translate-x-1/2">
+        <div className="absolute bottom-36 left-1/2 z-10 -translate-x-1/2">
           <Button
             variant="secondary"
             size="sm"
-            className="rounded-full shadow-lg"
+            className="rounded-full shadow-lg border border-border/50 bg-card/90 backdrop-blur-sm hover:bg-card"
             onClick={scrollToBottom}
           >
-            <ArrowDown className="mr-1 h-4 w-4" />
-            Scroll to bottom
+            <ArrowDown className="mr-1.5 h-3.5 w-3.5" />
+            New messages
           </Button>
         </div>
       )}
 
       {/* Suggested Prompts */}
       {messages.length === 1 && (
-        <div className="border-t py-4">
+        <div className="border-t border-border/50 py-5">
           <div className="mx-auto max-w-3xl px-4">
-            <p className="mb-3 text-sm font-medium text-muted-foreground">
-              Suggested questions
+            <p className="mb-4 text-sm font-medium text-muted-foreground">
+              Get started with a question
             </p>
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
               {suggestedPrompts.map((prompt) => (
                 <button
                   key={prompt.text}
                   onClick={() => handlePromptClick(prompt.text)}
-                  className="flex items-center gap-3 rounded-lg border bg-card p-3 text-left transition-all hover:border-primary hover:bg-muted/50"
+                  className={cn(
+                    'group flex items-center gap-3 rounded-xl border border-border/50 bg-card/50 p-4 text-left transition-all duration-200',
+                    'hover:border-primary/30 hover:bg-muted/50 hover:shadow-lg'
+                  )}
                 >
-                  <div className="rounded-lg bg-primary/10 p-2">
-                    <prompt.icon className="h-4 w-4 text-primary" />
+                  <div className={cn(
+                    'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br transition-transform group-hover:scale-110',
+                    prompt.gradient
+                  )}>
+                    <prompt.icon className={cn('h-5 w-5', prompt.iconColor)} />
                   </div>
-                  <span className="text-sm font-medium">{prompt.text}</span>
+                  <span className="text-sm font-medium leading-tight">{prompt.text}</span>
                 </button>
               ))}
             </div>
@@ -482,30 +513,39 @@ What would you like to explore today?`,
       )}
 
       {/* Input Area */}
-      <div className="border-t bg-background p-4">
+      <div className="border-t border-border/50 bg-card/30 backdrop-blur-sm p-4">
         <div className="mx-auto max-w-3xl">
-          <div className="flex items-end gap-2">
+          <div className="relative flex items-end gap-3">
             <div className="relative flex-1">
-              <Input
+              <textarea
+                ref={inputRef}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyDown}
                 placeholder="Ask me anything about your campaigns..."
-                className="min-h-[48px] resize-none rounded-xl border-2 pr-24 focus-visible:ring-1"
+                rows={1}
+                className={cn(
+                  'w-full resize-none rounded-xl border-2 border-border/50 bg-background px-4 py-3 pr-24 text-sm',
+                  'placeholder:text-muted-foreground/60',
+                  'focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20',
+                  'disabled:cursor-not-allowed disabled:opacity-50',
+                  'transition-all duration-200'
+                )}
                 disabled={isTyping}
+                style={{ minHeight: '48px', maxHeight: '120px' }}
               />
-              <div className="absolute bottom-2 right-2 flex items-center gap-1">
+              <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 >
                   <Paperclip className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 >
                   <Mic className="h-4 w-4" />
                 </Button>
@@ -514,13 +554,18 @@ What would you like to explore today?`,
             <Button
               onClick={() => handleSendMessage(inputValue)}
               disabled={!inputValue.trim() || isTyping}
-              className="h-12 w-12 rounded-xl"
+              className={cn(
+                'h-12 w-12 rounded-xl transition-all duration-200',
+                inputValue.trim() && !isTyping
+                  ? 'btn-premium shadow-lg'
+                  : 'bg-muted text-muted-foreground'
+              )}
             >
               <Send className="h-5 w-5" />
             </Button>
           </div>
-          <p className="mt-2 text-center text-xs text-muted-foreground">
-            Ryze AI has access to your campaign data. Responses are generated based on your actual performance metrics.
+          <p className="mt-3 text-center text-xs text-muted-foreground/70">
+            Ryze AI analyzes your real campaign data to provide personalized insights and recommendations.
           </p>
         </div>
       </div>
