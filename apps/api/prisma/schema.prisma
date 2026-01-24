@@ -1,0 +1,714 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============ AUTH & USERS ============
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  avatar        String?
+  emailVerified Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  workspaces    WorkspaceMember[]
+  refreshTokens RefreshToken[]
+  chatSessions  ChatSession[]
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ============ WORKSPACES ============
+
+model Workspace {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  plan      Plan     @default(FREE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members          WorkspaceMember[]
+  adAccounts       AdAccount[]
+  reports          Report[]
+  chatSessions     ChatSession[]
+  automationRules  AutomationRule[]
+  predictions      Prediction[]
+  alerts           Alert[]
+  competitors      Competitor[]
+  visitors         Visitor[]
+}
+
+model WorkspaceMember {
+  id          String   @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        Role     @default(MEMBER)
+  joinedAt    DateTime @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([userId])
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum Plan {
+  FREE
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+// ============ AD ACCOUNTS & PLATFORMS ============
+
+model AdAccount {
+  id           String        @id @default(cuid())
+  workspaceId  String
+  platform     AdPlatform
+  name         String
+  externalId   String
+  accessToken  String
+  refreshToken String?
+  status       AccountStatus @default(ACTIVE)
+  lastSyncAt   DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  workspace       Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  campaigns       Campaign[]
+  metrics         AdMetric[]
+  recommendations Recommendation[]
+
+  @@unique([workspaceId, platform, externalId])
+  @@index([workspaceId])
+}
+
+enum AdPlatform {
+  GOOGLE_ADS
+  META
+  LINKEDIN
+  AMAZON
+  REDDIT
+  TWITTER
+  TIKTOK
+}
+
+enum AccountStatus {
+  ACTIVE
+  PAUSED
+  DISCONNECTED
+  ERROR
+}
+
+// ============ CAMPAIGNS & ADS ============
+
+model Campaign {
+  id          String         @id @default(cuid())
+  adAccountId String
+  externalId  String
+  name        String
+  status      CampaignStatus
+  objective   String?
+  budget      Float?
+  budgetType  BudgetType?
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  adAccount AdAccount  @relation(fields: [adAccountId], references: [id], onDelete: Cascade)
+  adGroups  AdGroup[]
+  metrics   AdMetric[]
+
+  @@unique([adAccountId, externalId])
+  @@index([adAccountId])
+}
+
+model AdGroup {
+  id         String   @id @default(cuid())
+  campaignId String
+  externalId String
+  name       String
+  status     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  campaign Campaign   @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  ads      Ad[]
+  metrics  AdMetric[]
+
+  @@unique([campaignId, externalId])
+  @@index([campaignId])
+}
+
+model Ad {
+  id          String   @id @default(cuid())
+  adGroupId   String
+  externalId  String
+  name        String
+  type        AdType
+  status      String
+  headline    String?
+  description String?
+  imageUrl    String?
+  videoUrl    String?
+  ctaText     String?
+  landingUrl  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  adGroup          AdGroup           @relation(fields: [adGroupId], references: [id], onDelete: Cascade)
+  metrics          AdMetric[]
+  creativeAnalysis CreativeAnalysis?
+
+  @@unique([adGroupId, externalId])
+  @@index([adGroupId])
+}
+
+enum CampaignStatus {
+  ACTIVE
+  PAUSED
+  ENDED
+  DRAFT
+  REMOVED
+}
+
+enum BudgetType {
+  DAILY
+  LIFETIME
+}
+
+enum AdType {
+  IMAGE
+  VIDEO
+  CAROUSEL
+  TEXT
+  RESPONSIVE
+}
+
+// ============ METRICS & ANALYTICS ============
+
+model AdMetric {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  adAccountId String?
+  campaignId  String?
+  adGroupId   String?
+  adId        String?
+
+  // Core metrics
+  impressions Int   @default(0)
+  clicks      Int   @default(0)
+  spend       Float @default(0)
+  conversions Int   @default(0)
+  revenue     Float @default(0)
+
+  // Calculated metrics
+  ctr  Float?
+  cpc  Float?
+  cpa  Float?
+  roas Float?
+
+  createdAt DateTime @default(now())
+
+  adAccount AdAccount? @relation(fields: [adAccountId], references: [id], onDelete: Cascade)
+  campaign  Campaign?  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  adGroup   AdGroup?   @relation(fields: [adGroupId], references: [id], onDelete: Cascade)
+  ad        Ad?        @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  @@unique([date, adAccountId, campaignId, adGroupId, adId])
+  @@index([date])
+  @@index([adAccountId, date])
+  @@index([campaignId, date])
+}
+
+// ============ AI RECOMMENDATIONS ============
+
+model Recommendation {
+  id          String               @id @default(cuid())
+  adAccountId String
+  type        RecommendationType
+  priority    Priority
+  title       String
+  description String               @db.Text
+  impact      String?
+  impactValue Float?
+  actionData  Json?
+  status      RecommendationStatus @default(PENDING)
+  createdAt   DateTime             @default(now())
+  expiresAt   DateTime?
+
+  adAccount AdAccount @relation(fields: [adAccountId], references: [id], onDelete: Cascade)
+
+  @@index([adAccountId, status])
+  @@index([createdAt])
+}
+
+enum RecommendationType {
+  PAUSE_KEYWORD
+  ADD_NEGATIVE_KEYWORD
+  ADJUST_BID
+  BUDGET_REALLOCATION
+  SPLIT_CAMPAIGN
+  FIX_TRACKING
+  CREATIVE_REFRESH
+  AUDIENCE_EXPANSION
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum RecommendationStatus {
+  PENDING
+  APPLIED
+  DISMISSED
+  EXPIRED
+}
+
+// ============ CREATIVE ANALYSIS ============
+
+model CreativeAnalysis {
+  id   String @id @default(cuid())
+  adId String @unique
+
+  // Scores (0-100)
+  overallScore Int
+  visualScore  Int
+  copyScore    Int
+  ctaScore     Int
+
+  // AI Analysis
+  strengths  String[]
+  weaknesses String[]
+  suggestions String[]
+
+  // Generated alternatives
+  alternativeHeadlines     String[]
+  alternativeDescriptions  String[]
+
+  analyzedAt DateTime @default(now())
+
+  ad Ad @relation(fields: [adId], references: [id], onDelete: Cascade)
+}
+
+// ============ AI CHAT ============
+
+model ChatSession {
+  id          String   @id @default(cuid())
+  userId      String
+  workspaceId String
+  title       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+
+  @@index([userId])
+  @@index([workspaceId])
+}
+
+model ChatMessage {
+  id        String      @id @default(cuid())
+  sessionId String
+  role      MessageRole
+  content   String      @db.Text
+  metadata  Json?
+  createdAt DateTime    @default(now())
+
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+// ============ REPORTS ============
+
+model Report {
+  id           String       @id @default(cuid())
+  workspaceId  String
+  type         ReportType
+  title        String
+  config       Json
+  content      Json?
+  status       ReportStatus @default(PENDING)
+  scheduleCron String?
+  createdAt    DateTime     @default(now())
+  generatedAt  DateTime?
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}
+
+enum ReportType {
+  PERFORMANCE
+  CREATIVE
+  AUDIT
+  CUSTOM
+}
+
+enum ReportStatus {
+  PENDING
+  GENERATING
+  COMPLETED
+  FAILED
+}
+
+// ============ AUTOMATION ENGINE ============
+
+model AutomationRule {
+  id            String        @id @default(cuid())
+  workspaceId   String
+  name          String
+  description   String?
+  triggerType   TriggerType
+  triggerConfig Json
+  actionType    ActionType
+  actionConfig  Json
+  guardrails    Json
+  executionMode ExecutionMode @default(APPROVAL)
+  status        RuleStatus    @default(ACTIVE)
+  lastTriggered DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  workspace  Workspace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  executions AutomationExecution[]
+
+  @@index([workspaceId, status])
+}
+
+model AutomationExecution {
+  id          String          @id @default(cuid())
+  ruleId      String
+  status      ExecutionStatus
+  actionTaken Json
+  result      Json?
+  error       String?
+  approvedBy  String?
+  executedAt  DateTime        @default(now())
+
+  rule AutomationRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId])
+  @@index([executedAt])
+}
+
+enum TriggerType {
+  CPA_ABOVE_THRESHOLD
+  ROAS_BELOW_THRESHOLD
+  SPEND_EXCEEDS_BUDGET
+  CTR_DROP
+  CONVERSION_DROP
+  SCHEDULE
+  AI_RECOMMENDATION
+}
+
+enum ActionType {
+  PAUSE_CAMPAIGN
+  PAUSE_KEYWORD
+  ADJUST_BID
+  ADJUST_BUDGET
+  ADD_NEGATIVE_KEYWORD
+  REALLOCATE_BUDGET
+  ENABLE_CAMPAIGN
+}
+
+enum ExecutionMode {
+  AUTO
+  APPROVAL
+  NOTIFY
+}
+
+enum RuleStatus {
+  ACTIVE
+  PAUSED
+  DISABLED
+}
+
+enum ExecutionStatus {
+  PENDING
+  APPROVED
+  EXECUTED
+  REJECTED
+  FAILED
+}
+
+// ============ PREDICTIONS & ALERTS ============
+
+model Prediction {
+  id              String           @id @default(cuid())
+  workspaceId     String
+  entityType      String
+  entityId        String
+  metric          String
+  currentValue    Float
+  predictedValue  Float
+  predictedChange Float
+  confidence      Float
+  timeframe       String
+  factors         Json
+  status          PredictionStatus @default(ACTIVE)
+  actualValue     Float?
+  wasAccurate     Boolean?
+  createdAt       DateTime         @default(now())
+  expiresAt       DateTime
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, status, expiresAt])
+}
+
+model Alert {
+  id          String    @id @default(cuid())
+  workspaceId String
+  type        AlertType
+  severity    Severity
+  title       String
+  message     String    @db.Text
+  entityType  String?
+  entityId    String?
+  data        Json?
+  isRead      Boolean   @default(false)
+  isDismissed Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, isRead])
+  @@index([createdAt])
+}
+
+enum PredictionStatus {
+  ACTIVE
+  EXPIRED
+  VERIFIED
+}
+
+enum AlertType {
+  PREDICTION_WARNING
+  ANOMALY_DETECTED
+  BUDGET_ALERT
+  PERFORMANCE_DROP
+  COMPETITOR_ALERT
+  AUTOMATION_EXECUTED
+}
+
+enum Severity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+// ============ COMPETITOR INTELLIGENCE ============
+
+model Competitor {
+  id              String       @id @default(cuid())
+  workspaceId     String
+  name            String
+  domain          String
+  description     String?
+  trackedKeywords String[]
+  platforms       AdPlatform[]
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  workspace Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  ads       CompetitorAd[]
+  insights  CompetitorInsight[]
+  snapshots CompetitorSnapshot[]
+
+  @@index([workspaceId])
+}
+
+model CompetitorAd {
+  id           String     @id @default(cuid())
+  competitorId String
+  platform     AdPlatform
+  externalId   String?
+  adType       String
+  headline     String?
+  description  String?
+  imageUrl     String?
+  videoUrl     String?
+  landingUrl   String?
+  callToAction String?
+  firstSeen    DateTime   @default(now())
+  lastSeen     DateTime   @default(now())
+  isActive     Boolean    @default(true)
+
+  competitor Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+
+  @@unique([competitorId, platform, externalId])
+  @@index([competitorId])
+}
+
+model CompetitorInsight {
+  id           String   @id @default(cuid())
+  competitorId String
+  type         String
+  title        String
+  description  String   @db.Text
+  data         Json?
+  severity     Severity @default(INFO)
+  createdAt    DateTime @default(now())
+
+  competitor Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+
+  @@index([competitorId])
+}
+
+model CompetitorSnapshot {
+  id                   String   @id @default(cuid())
+  competitorId         String
+  estimatedSpend       Float?
+  estimatedImpressions Int?
+  marketSharePercent   Float?
+  activeAdsCount       Int?
+  keywordsTracked      Int?
+  snapshotDate         DateTime @default(now())
+
+  competitor Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+
+  @@unique([competitorId, snapshotDate])
+  @@index([competitorId])
+}
+
+// ============ AUDIENCE JOURNEY TRACKING ============
+
+model Visitor {
+  id               String      @id @default(cuid())
+  workspaceId      String
+  anonymousId      String
+  userId           String?
+  email            String?
+  currentStage     FunnelStage @default(AWARENESS)
+  journeyScore     Float       @default(0)
+  predictedValue   Float?
+  firstSeenAt      DateTime    @default(now())
+  lastSeenAt       DateTime    @default(now())
+  convertedAt      DateTime?
+  totalTouchpoints Int         @default(0)
+
+  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  touchpoints Touchpoint[]
+
+  @@unique([workspaceId, anonymousId])
+  @@index([workspaceId, currentStage])
+}
+
+model Touchpoint {
+  id         String      @id @default(cuid())
+  visitorId  String
+  timestamp  DateTime    @default(now())
+  channel    Channel
+  source     String?
+  medium     String?
+  campaignId String?
+  adId       String?
+  action     String
+  pageUrl    String?
+  stage      FunnelStage
+  value      Float?
+
+  // Attribution weights
+  firstTouchWeight    Float @default(0)
+  lastTouchWeight     Float @default(0)
+  linearWeight        Float @default(0)
+  timeDecayWeight     Float @default(0)
+  positionBasedWeight Float @default(0)
+  dataDrivenWeight    Float @default(0)
+
+  visitor Visitor @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+
+  @@index([visitorId, timestamp])
+  @@index([campaignId])
+}
+
+enum FunnelStage {
+  AWARENESS
+  INTEREST
+  CONSIDERATION
+  INTENT
+  PURCHASE
+  LOYALTY
+  ADVOCACY
+}
+
+enum Channel {
+  PAID_SEARCH
+  PAID_SOCIAL
+  ORGANIC_SEARCH
+  ORGANIC_SOCIAL
+  EMAIL
+  DIRECT
+  REFERRAL
+  DISPLAY
+}
+
+// ============ AI CREATIVE LAB ============
+
+model GeneratedCreative {
+  id          String   @id @default(cuid())
+  workspaceId String
+  platform    AdPlatform
+  objective   String
+  productInfo Json
+  audience    Json
+  guidelines  Json?
+
+  // Generated content
+  headlines    String[]
+  descriptions String[]
+  callToActions String[]
+  imageUrls    String[]
+  videoScripts Json?
+
+  // Targeting & budget recommendations
+  targeting    Json?
+  budget       Json?
+
+  status       String   @default("completed")
+  createdAt    DateTime @default(now())
+
+  @@index([workspaceId])
+}

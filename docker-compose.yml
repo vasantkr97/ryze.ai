@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      # Add your secrets here or use a .env file on the server
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - GOOGLE_AI_API_KEY=${GOOGLE_AI_API_KEY}
+      - FRONTEND_URL=${FRONTEND_URL}
+    restart: always
+
+  # Optional: If you want to serve the frontend via Docker as well (e.g., Nginx)
+  # For simplest setup, we often recommend App Platform Static Sites, but here is a self-hosted option.
+  # Note: You would need a separate Dockerfile.web for this to serve static files with Nginx

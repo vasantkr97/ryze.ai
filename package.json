@@ -1,0 +1,46 @@
+{
+  "name": "ryze-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered ad management platform",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun run --filter '*' dev",
+    "dev:api": "bun run --filter @ryze/api dev",
+    "dev:web": "bun run --filter @ryze/web dev",
+    "build": "bun run --filter '*' build",
+    "build:api": "bun run --filter @ryze/api build",
+    "build:web": "bun run --filter @ryze/web build",
+    "lint": "bun run --filter '*' lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:generate": "bun run --filter @ryze/api db:generate",
+    "db:migrate": "bun run --filter @ryze/api db:migrate",
+    "db:push": "bun run --filter @ryze/api db:push",
+    "db:seed": "bun run --filter @ryze/api db:seed",
+    "db:studio": "bun run --filter @ryze/api db:studio",
+    "clean": "bun run --filter '*' clean && rimraf node_modules"
+  },
+  "keywords": [
+    "ai",
+    "advertising",
+    "marketing",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.16.0",
+    "prisma": "^7.3.0"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "pg": "^8.17.2"
+  }
+}
