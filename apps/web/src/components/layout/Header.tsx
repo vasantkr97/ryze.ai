@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '@/stores/auth-store';
 import {
   Bell,
   Search,
   Menu,
-  Moon,
-  Sun,
   LogOut,
   User,
   Settings,
@@ -42,7 +41,9 @@ interface HeaderProps {
 }
 
 export function Header({ className, onMenuClick }: HeaderProps) {
-  const [theme, setTheme] = React.useState<'light' | 'dark'>('dark');
+  const navigate = useNavigate();
+  const logout = useAuthStore((state) => state.logout);
+  // const [theme, setTheme] = React.useState<'light' | 'dark'>('dark');
   const [notifications] = React.useState<Notification[]>([
     {
       id: '1',
@@ -72,11 +73,11 @@ export function Header({ className, onMenuClick }: HeaderProps) {
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-  };
+  // const toggleTheme = () => {
+  //   const newTheme = theme === 'light' ? 'dark' : 'light';
+  //   setTheme(newTheme);
+  //   document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  // };
 
   return (
     <header
@@ -253,7 +254,13 @@ export function Header({ className, onMenuClick }: HeaderProps) {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer gap-2 text-destructive focus:text-destructive focus:bg-destructive/10">
+            <DropdownMenuItem
+              className="cursor-pointer gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
+              onClick={() => {
+                logout();
+                navigate('/login');
+              }}
+            >
               <LogOut className="h-4 w-4" />
               Log out
             </DropdownMenuItem>
