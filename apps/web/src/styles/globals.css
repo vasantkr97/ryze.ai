@@ -32,9 +32,7 @@
     --success: 142 76% 36%;
     --warning: 43 96% 56%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }

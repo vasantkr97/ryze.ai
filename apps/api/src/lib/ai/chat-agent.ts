@@ -2,12 +2,12 @@ import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
 import { AIMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
-import { env } from '@/config/env.js';
-import { AI_MODELS } from '@/config/constants.js';
-import { createMetricsTool } from './tools/metrics-tool.js';
-import { createCampaignsTool } from './tools/campaigns-tool.js';
-import { createRecommendationsTool } from './tools/recommendations-tool.js';
-import { createAnalysisTool } from './tools/analysis-tool.js';
+import { env } from '@/config/env';
+import { AI_MODELS } from '@/config/constants';
+import { createMetricsTool } from './tools/metrics-tool';
+import { createCampaignsTool } from './tools/campaigns-tool';
+import { createRecommendationsTool } from './tools/recommendations-tool';
+import { createAnalysisTool } from './tools/analysis-tool';
 
 export interface WorkspaceContext {
   workspaceId: string;

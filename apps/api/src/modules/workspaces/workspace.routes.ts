@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { authenticate } from '@/middleware/auth.js';
-import { validateBody } from '@/middleware/validate.js';
-import * as workspaceHandlers from './workspace.handlers.js';
-import { createWorkspaceSchema, updateWorkspaceSchema, inviteMemberSchema } from './workspace.schema.js';
+import { authenticate } from '@/middleware/auth';
+import { validateBody } from '@/middleware/validate';
+import * as workspaceHandlers from './workspace.handlers';
+import { createWorkspaceSchema, updateWorkspaceSchema, inviteMemberSchema } from './workspace.schema';
 
 const router = Router();
 

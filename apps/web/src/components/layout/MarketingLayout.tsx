@@ -47,12 +47,7 @@ export function MarketingLayout({ className }: MarketingLayoutProps) {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <Link to="/login">
-              <Button variant="ghost" size="sm">
-                Sign In
-              </Button>
-            </Link>
-            <Link to="/register">
+            <Link to="/dashboard">
               <Button size="sm">Get Started</Button>
             </Link>
           </div>

@@ -2,7 +2,7 @@
   "name": "@ryze/api",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+
   "scripts": {
     "dev": "bun --watch src/index.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",

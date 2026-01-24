@@ -1,6 +1,6 @@
-import { prisma } from '@/db/client.js';
-import { runAIChat, streamAIChat, type WorkspaceContext, type ChatResponse } from '@/lib/ai/chat-agent.js';
-import { AppError } from '@/middleware/error-handler.js';
+import { prisma } from '@/db/client';
+import { runAIChat, streamAIChat, type WorkspaceContext, type ChatResponse } from '@/lib/ai/chat-agent';
+import { AppError } from '@/middleware/error-handler';
 
 export interface ChatSessionWithMessages {
   id: string;

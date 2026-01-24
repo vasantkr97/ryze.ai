@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { authenticate } from '@/middleware/auth.js';
-import { sendSuccess, sendCreated } from '@/lib/utils/response.js';
+import { authenticate } from '@/middleware/auth';
+import { sendSuccess, sendCreated } from '@/lib/utils/response';
 
 const router = Router();
 

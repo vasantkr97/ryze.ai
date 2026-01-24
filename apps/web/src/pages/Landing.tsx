@@ -10,7 +10,6 @@ import {
   Sparkles,
   ArrowRight,
   CheckCircle2,
-  Play,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -122,20 +121,14 @@ export default function Landing() {
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Button size="lg" asChild>
-                <Link to="/register">
-                  Start Free Trial
+                <Link to="/dashboard">
+                  Get Started
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link to="#demo">
-                  <Play className="mr-2 h-4 w-4" />
-                  Watch Demo
                 </Link>
               </Button>
             </div>
             <p className="mt-4 text-sm text-muted-foreground">
-              No credit card required. 14-day free trial.
+              No credit card required. Instant access.
             </p>
           </motion.div>
         </div>
@@ -319,8 +312,8 @@ export default function Landing() {
               </p>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button size="lg" variant="secondary" asChild>
-                  <Link to="/register">
-                    Start Free Trial
+                  <Link to="/dashboard">
+                    Get Started
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -328,7 +321,7 @@ export default function Landing() {
               <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm opacity-80">
                 <span className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4" />
-                  14-day free trial
+                  Instant Access
                 </span>
                 <span className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4" />

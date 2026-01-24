@@ -1,8 +1,8 @@
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { z } from 'zod';
-import { prisma } from '@/db/client.js';
+import { prisma } from '@/db/client';
 import { subDays } from 'date-fns';
-import type { WorkspaceContext } from '../chat-agent.js';
+import type { WorkspaceContext } from '../chat-agent';
 
 const campaignsInputSchema = z.object({
   status: z

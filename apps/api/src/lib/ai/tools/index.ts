@@ -1,4 +1,4 @@
-export { createMetricsTool } from './metrics-tool.js';
-export { createCampaignsTool } from './campaigns-tool.js';
-export { createRecommendationsTool } from './recommendations-tool.js';
-export { createAnalysisTool } from './analysis-tool.js';
+export { createMetricsTool } from './metrics-tool';
+export { createCampaignsTool } from './campaigns-tool';
+export { createRecommendationsTool } from './recommendations-tool';
+export { createAnalysisTool } from './analysis-tool';

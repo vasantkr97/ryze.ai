@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { prisma } from '@/db/client.js';
-import { sendSuccess } from '@/lib/utils/response.js';
-import { AppError } from '@/middleware/error-handler.js';
+import { prisma } from '@/db/client';
+import { sendSuccess } from '@/lib/utils/response';
+import { AppError } from '@/middleware/error-handler';
 
 export const getProfile = async (
   req: Request,

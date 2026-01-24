@@ -1,14 +1,14 @@
 import { nanoid } from 'nanoid';
-import { prisma } from '@/db/client.js';
-import { hashPassword, comparePassword } from '@/lib/utils/hash.js';
+import { prisma } from '@/db/client';
+import { hashPassword, comparePassword } from '@/lib/utils/hash';
 import {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
   TokenPayload,
-} from '@/lib/utils/jwt.js';
-import { AppError } from '@/middleware/error-handler.js';
-import type { RegisterInput, LoginInput } from './auth.schema.js';
+} from '@/lib/utils/jwt';
+import { AppError } from '@/middleware/error-handler';
+import type { RegisterInput, LoginInput } from './auth.schema';
 
 export interface AuthTokens {
   accessToken: string;

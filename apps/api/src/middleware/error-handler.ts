@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
-import { env } from '@/config/env.js';
-import { sendError } from '@/lib/utils/response.js';
+import { env } from '@/config/env';
+import { sendError } from '@/lib/utils/response';
 
 export class AppError extends Error {
   constructor(

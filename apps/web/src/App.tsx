@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
-import { useAuthStore } from '@/stores/auth-store';
+// import { useAuthStore } from '@/stores/auth-store';
 
 // Layouts
 import MarketingLayout from '@/components/layout/MarketingLayout';
@@ -8,8 +8,8 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 
 // Marketing Pages
 import Landing from '@/pages/Landing';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
+// import Login from '@/pages/Login';
+// import Register from '@/pages/Register';
 
 // Dashboard Pages
 import Dashboard from '@/pages/dashboard/Dashboard';
@@ -28,19 +28,19 @@ import Settings from '@/pages/dashboard/Settings';
 
 // Protected route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuthStore();
+  // const { isAuthenticated, isLoading } = useAuthStore();
 
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    );
-  }
+  //   if (isLoading) {
+  //     return (
+  //       <div className="flex h-screen items-center justify-center">
+  //         <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+  //       </div>
+  //     );
+  //   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  //   if (!isAuthenticated) {
+  //     return <Navigate to="/login" replace />;
+  //   }
 
   return <>{children}</>;
 };
@@ -52,8 +52,8 @@ function App() {
         {/* Marketing routes */}
         <Route element={<MarketingLayout />}>
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/register" element={<Navigate to="/dashboard" replace />} />
         </Route>
 
         {/* Dashboard routes */}

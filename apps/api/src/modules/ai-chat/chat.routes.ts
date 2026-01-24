@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { authenticate, requireWorkspace } from '@/middleware/auth.js';
-import { validateBody } from '@/middleware/validate.js';
-import * as chatHandlers from './chat.handlers.js';
-import { sendMessageSchema, createSessionSchema } from './chat.schema.js';
+import { authenticate, requireWorkspace } from '@/middleware/auth';
+import { validateBody } from '@/middleware/validate';
+import * as chatHandlers from './chat.handlers';
+import { sendMessageSchema, createSessionSchema } from './chat.schema';
 
 const router = Router();
 

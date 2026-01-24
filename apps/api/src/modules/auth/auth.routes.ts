@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { validateBody } from '@/middleware/validate.js';
-import { authenticate } from '@/middleware/auth.js';
-import * as authHandlers from './auth.handlers.js';
+import { validateBody } from '@/middleware/validate';
+import { authenticate } from '@/middleware/auth';
+import * as authHandlers from './auth.handlers';
 import {
   registerSchema,
   loginSchema,
   refreshTokenSchema,
-} from './auth.schema.js';
+} from './auth.schema';
 
 const router = Router();
 

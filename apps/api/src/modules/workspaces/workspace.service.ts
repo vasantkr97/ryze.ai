@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
-import { prisma } from '@/db/client.js';
-import { AppError } from '@/middleware/error-handler.js';
-import type { CreateWorkspaceInput, UpdateWorkspaceInput, InviteMemberInput } from './workspace.schema.js';
+import { prisma } from '@/db/client';
+import { AppError } from '@/middleware/error-handler';
+import type { CreateWorkspaceInput, UpdateWorkspaceInput, InviteMemberInput } from './workspace.schema';
 
 export const createWorkspace = async (userId: string, input: CreateWorkspaceInput) => {
   const slug = `${input.name.toLowerCase().replace(/\s+/g, '-')}-${nanoid(6)}`;

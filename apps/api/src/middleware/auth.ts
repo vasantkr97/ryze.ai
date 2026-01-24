@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyAccessToken, TokenPayload } from '@/lib/utils/jwt.js';
-import { sendError } from '@/lib/utils/response.js';
-import { prisma } from '@/db/client.js';
+import { verifyAccessToken, TokenPayload } from '@/lib/utils/jwt';
+import { sendError } from '@/lib/utils/response';
+import { prisma } from '@/db/client';
 
 declare global {
   namespace Express {

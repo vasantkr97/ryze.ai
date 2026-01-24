@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { sendSuccess, sendCreated, sendNoContent } from '@/lib/utils/response.js';
-import { AppError } from '@/middleware/error-handler.js';
-import * as chatService from './chat.service.js';
-import type { SendMessageInput, CreateSessionInput } from './chat.schema.js';
+import { sendSuccess, sendCreated, sendNoContent } from '@/lib/utils/response';
+import { AppError } from '@/middleware/error-handler';
+import * as chatService from './chat.service';
+import type { SendMessageInput, CreateSessionInput } from './chat.schema';
 
 export const createSession = async (
   req: Request<{ workspaceId: string }, unknown, CreateSessionInput>,

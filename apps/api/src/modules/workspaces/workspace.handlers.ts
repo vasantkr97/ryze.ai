@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { sendSuccess, sendCreated, sendNoContent } from '@/lib/utils/response.js';
-import { AppError } from '@/middleware/error-handler.js';
-import * as workspaceService from './workspace.service.js';
-import type { CreateWorkspaceInput, UpdateWorkspaceInput, InviteMemberInput } from './workspace.schema.js';
+import { sendSuccess, sendCreated, sendNoContent } from '@/lib/utils/response';
+import { AppError } from '@/middleware/error-handler';
+import * as workspaceService from './workspace.service';
+import type { CreateWorkspaceInput, UpdateWorkspaceInput, InviteMemberInput } from './workspace.schema';
 
 export const create = async (
   req: Request<unknown, unknown, CreateWorkspaceInput>,

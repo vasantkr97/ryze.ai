@@ -4,26 +4,26 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 
-import { env } from '@/config/env.js';
-import { API_PREFIX } from '@/config/constants.js';
-import { prisma, disconnectDb } from '@/db/client.js';
-import { errorHandler, notFoundHandler } from '@/middleware/error-handler.js';
+import { env } from '@/config/env';
+import { API_PREFIX } from '@/config/constants';
+import { prisma, disconnectDb } from '@/db/client';
+import { errorHandler, notFoundHandler } from '@/middleware/error-handler';
 
 // Import routes
-import authRoutes from '@/modules/auth/auth.routes.js';
-import userRoutes from '@/modules/users/user.routes.js';
-import workspaceRoutes from '@/modules/workspaces/workspace.routes.js';
-import adAccountRoutes from '@/modules/ad-accounts/ad-account.routes.js';
-import campaignRoutes from '@/modules/campaigns/campaign.routes.js';
-import analyticsRoutes from '@/modules/analytics/analytics.routes.js';
-import chatRoutes from '@/modules/ai-chat/chat.routes.js';
-import recommendationRoutes from '@/modules/ai-recommendations/recommendation.routes.js';
-import automationRoutes from '@/modules/automation/automation.routes.js';
-import predictionRoutes from '@/modules/predictions/prediction.routes.js';
-import competitorRoutes from '@/modules/competitors/competitor.routes.js';
-import journeyRoutes from '@/modules/journeys/journey.routes.js';
-import creativeRoutes from '@/modules/ai-creative/creative.routes.js';
-import reportRoutes from '@/modules/reports/report.routes.js';
+import authRoutes from '@/modules/auth/auth.routes';
+import userRoutes from '@/modules/users/user.routes';
+import workspaceRoutes from '@/modules/workspaces/workspace.routes';
+import adAccountRoutes from '@/modules/ad-accounts/ad-account.routes';
+import campaignRoutes from '@/modules/campaigns/campaign.routes';
+import analyticsRoutes from '@/modules/analytics/analytics.routes';
+import chatRoutes from '@/modules/ai-chat/chat.routes';
+import recommendationRoutes from '@/modules/ai-recommendations/recommendation.routes';
+import automationRoutes from '@/modules/automation/automation.routes';
+import predictionRoutes from '@/modules/predictions/prediction.routes';
+import competitorRoutes from '@/modules/competitors/competitor.routes';
+import journeyRoutes from '@/modules/journeys/journey.routes';
+import creativeRoutes from '@/modules/ai-creative/creative.routes';
+import reportRoutes from '@/modules/reports/report.routes';
 
 const app = express();
 

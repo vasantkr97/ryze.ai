@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { sendSuccess, sendCreated, sendNoContent } from '@/lib/utils/response.js';
-import * as authService from './auth.service.js';
-import type { RegisterInput, LoginInput, RefreshTokenInput } from './auth.schema.js';
+import { sendSuccess, sendCreated, sendNoContent } from '@/lib/utils/response';
+import * as authService from './auth.service';
+import type { RegisterInput, LoginInput, RefreshTokenInput } from './auth.schema';
 
 export const register = async (
   req: Request<unknown, unknown, RegisterInput>,
