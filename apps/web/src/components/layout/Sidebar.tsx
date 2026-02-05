@@ -275,7 +275,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
               <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
                 Unlock unlimited AI insights and advanced automation
               </p>
-              <Button size="sm" className="w-full btn-premium text-xs h-8 font-semibold">
+              <Button size="sm" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 text-xs h-8 font-semibold">
                 Upgrade Now
                 <ArrowRight className="ml-1.5 h-3 w-3" />
               </Button>

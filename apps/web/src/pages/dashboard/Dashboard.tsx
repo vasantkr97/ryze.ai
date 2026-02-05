@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   TrendingUp,
@@ -15,8 +16,9 @@ import {
   Activity,
 } from 'lucide-react';
 import {
-  AreaChart,
   Area,
+  Bar,
+  ComposedChart,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -159,6 +161,8 @@ const quickActions = [
 ];
 
 export default function Dashboard() {
+  const [chartView, setChartView] = useState<'overview' | 'roas' | 'spend'>('overview');
+
   return (
     <div className="space-y-8">
       {/* Page Header */}
@@ -234,68 +238,140 @@ export default function Dashboard() {
       </div>
 
       {/* Performance Chart */}
-      <Card className="overflow-hidden">
-        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="overflow-hidden border-border/50 shadow-sm">
+        <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pb-2">
           <div>
             <CardTitle className="flex items-center gap-2">
               <Activity className="h-5 w-5 text-primary" />
               Performance Overview
             </CardTitle>
             <CardDescription>
-              ROAS and spend trends over the last 10 weeks
+              Track your key metrics over time
             </CardDescription>
           </div>
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/dashboard/analytics">
-              View Details
-              <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
-            </Link>
-          </Button>
+          <div className="flex items-center rounded-lg bg-muted/50 p-1">
+            {(['overview', 'roas', 'spend'] as const).map((view) => (
+              <button
+                key={view}
+                onClick={() => setChartView(view)}
+                className={cn(
+                  'rounded-md px-3 py-1.5 text-xs font-medium transition-all',
+                  chartView === view
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                {view.charAt(0).toUpperCase() + view.slice(1)}
+              </button>
+            ))}
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="h-[350px]">
+          <div className="h-[400px] w-full mt-4">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={performanceData}>
+              <ComposedChart data={performanceData} margin={{ top: 20, right: 0, left: 0, bottom: 20 }}>
                 <defs>
                   <linearGradient id="colorRoas" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
+                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                   </linearGradient>
+                  <linearGradient id="colorSpend" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--accent))" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0.2} />
+                  </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
                 <XAxis
                   dataKey="date"
                   stroke="hsl(var(--muted-foreground))"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  dy={15}
+                  tick={{ fill: 'hsl(var(--muted-foreground))' }}
                 />
-                <YAxis
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${value}x`}
-                />
+                {(chartView === 'overview' || chartView === 'roas') && (
+                  <YAxis
+                    yAxisId="left"
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(value) => `${value}x`}
+                    dx={-10}
+                    tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                  />
+                )}
+                {(chartView === 'overview' || chartView === 'spend') && (
+                  <YAxis
+                    yAxisId="right"
+                    orientation={chartView === 'overview' ? 'right' : 'left'}
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(value) => `$${(value / 1000).toFixed(1)}k`}
+                    dx={chartView === 'overview' ? 10 : -10}
+                    tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                  />
+                )}
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 40px hsl(var(--background) / 0.5)',
+                  cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 2, strokeOpacity: 0.1 }}
+                  content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="rounded-lg border bg-background p-3 shadow-xl ring-1 ring-black/5">
+                          <p className="mb-2 text-sm font-semibold text-foreground">{label}</p>
+                          <div className="flex flex-col gap-1">
+                            {payload.map((item: any) => (
+                              <div key={item.name} className="flex items-center gap-2 text-xs">
+                                <div 
+                                  className="h-2 w-2 rounded-full" 
+                                  style={{ backgroundColor: item.fill || item.stroke }}
+                                />
+                                <span className="text-muted-foreground w-12 capitalize">
+                                  {item.name}:
+                                </span>
+                                <span className="font-medium text-foreground tabular-nums">
+                                  {item.name === 'roas' 
+                                    ? `${item.value}x` 
+                                    : `$${item.value.toLocaleString()}`}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
                   }}
-                  labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 600 }}
-                  itemStyle={{ color: 'hsl(var(--muted-foreground))' }}
                 />
-                <Area
-                  type="monotone"
-                  dataKey="roas"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth={3}
-                  fillOpacity={1}
-                  fill="url(#colorRoas)"
-                />
-              </AreaChart>
+                
+                {(chartView === 'overview' || chartView === 'spend') && (
+                  <Bar 
+                    yAxisId="right"
+                    dataKey="spend" 
+                    fill="url(#colorSpend)"
+                    radius={[4, 4, 4, 4]} 
+                    barSize={chartView === 'spend' ? 40 : 12}
+                    animationDuration={1000}
+                  />
+                )}
+                
+                {(chartView === 'overview' || chartView === 'roas') && (
+                  <Area
+                    yAxisId="left"
+                    type="monotone"
+                    dataKey="roas"
+                    stroke="hsl(var(--primary))"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorRoas)"
+                    animationDuration={1500}
+                    dot={chartView === 'roas' ? { r: 4, fill: "hsl(var(--background))", stroke: "hsl(var(--primary))", strokeWidth: 2 } : false}
+                    activeDot={{ r: 6, fill: "hsl(var(--primary))", stroke: "hsl(var(--background))", strokeWidth: 2 }}
+                  />
+                )}
+              </ComposedChart>
             </ResponsiveContainer>
           </div>
         </CardContent>
