@@ -14,7 +14,6 @@ import {
   Palette,
   FileText,
   Settings,
-  Sparkles,
   ChevronDown,
   Plus,
   Building2,

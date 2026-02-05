@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/stores/auth-store';
+import { Link } from 'react-router-dom';
 import {
   Bell,
   Search,
   Menu,
-  LogOut,
   User,
   Settings,
   HelpCircle,
@@ -41,8 +39,8 @@ interface HeaderProps {
 }
 
 export function Header({ className, onMenuClick }: HeaderProps) {
-  const navigate = useNavigate();
-  const logout = useAuthStore((state) => state.logout);
+  //const navigate = useNavigate();
+  //const logout = useAuthStore((state) => state.logout);
   // const [theme, setTheme] = React.useState<'light' | 'dark'>('dark');
   const [notifications] = React.useState<Notification[]>([
     {
