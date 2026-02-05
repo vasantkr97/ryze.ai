@@ -8,8 +8,8 @@ import {
   Settings,
   HelpCircle,
   CreditCard,
-  Sparkles,
   Command,
+  Sparkles,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -39,8 +39,6 @@ interface HeaderProps {
 }
 
 export function Header({ className, onMenuClick }: HeaderProps) {
-  //const navigate = useNavigate();
-  //const logout = useAuthStore((state) => state.logout);
   // const [theme, setTheme] = React.useState<'light' | 'dark'>('dark');
   const [notifications] = React.useState<Notification[]>([
     {
