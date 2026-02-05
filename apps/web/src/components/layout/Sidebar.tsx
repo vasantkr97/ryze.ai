@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -147,19 +148,8 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
     >
       {/* Logo */}
       <div className="flex items-center h-16 px-4 border-b border-border/50">
-        <Link to="/dashboard" className="flex items-center gap-3 group">
-          <div className="relative">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25 transition-transform group-hover:scale-105">
-              <TrendingUp className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <div className="absolute -inset-1 rounded-xl bg-primary/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
-          </div>
-          {!collapsed && (
-            <div className="flex flex-col">
-              <span className="font-bold text-lg tracking-tight">Ryze</span>
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium -mt-1">AI Platform</span>
-            </div>
-          )}
+        <Link to="/dashboard" className="flex items-center gap-3 group w-full">
+           <Logo withText={!collapsed} />
         </Link>
       </div>
 

@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import {
   Send,
-  Sparkles,
   Bot,
   User,
   Lightbulb,
@@ -17,6 +16,7 @@ import {
   ArrowDown,
   Check,
 } from 'lucide-react';
+import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -298,15 +298,13 @@ What would you like to explore today?`,
       <div className="relative z-10 flex flex-shrink-0 items-center justify-between border-b border-border/40 bg-background/80 px-6 py-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="group flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 shadow-lg shadow-primary/5 transition-transform hover:scale-105">
-              <Sparkles className="h-6 w-6 text-primary" />
-            </div>
+            <Logo withText={false} className="scale-125" />
             <div className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-background ring-2 ring-background">
               <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
             </div>
           </div>
           <div>
-            <h1 className="text-lg font-bold tracking-tight text-foreground">Ryze AI Assistant</h1>
+            <h1 className="text-lg font-bold tracking-tight text-foreground">Linkrunner.ai Assistant</h1>
             <div className="flex items-center gap-1.5">
               <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
               <p className="text-xs font-medium text-muted-foreground">Always active & ready to help</p>
@@ -561,7 +559,7 @@ What would you like to explore today?`,
             </div>
           </div>
           <p className="mt-3 text-center text-[10px] font-medium text-muted-foreground/50">
-            Ryze AI combines real-time data with predictive models. Results may vary.
+            LinkRunner AI combines real-time data with predictive models. Results may vary.
           </p>
         </div>
       </div>

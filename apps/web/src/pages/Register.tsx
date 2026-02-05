@@ -3,12 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Sparkles, CheckCircle2, ArrowRight, Shield, Zap, TrendingUp } from 'lucide-react';
+import { Loader2, CheckCircle2, ArrowRight, Shield, Zap, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/toaster';
 import { useAuthStore } from '@/stores/auth-store';
+import { Logo } from '@/components/Logo';
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -68,7 +69,7 @@ export default function Register() {
       await register_(data.email, data.password, data.name);
       toast({
         title: 'Account created!',
-        description: 'Welcome to Ryze AI. Let\'s get started.',
+        description: 'Welcome to Linkrunner.ai. Let\'s get started.',
         variant: 'success',
       });
       navigate('/dashboard');
@@ -92,14 +93,14 @@ export default function Register() {
             {/* Headline */}
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                <Sparkles className="h-3.5 w-3.5" />
+                <Logo withText={false} className="scale-75 origin-left -ml-1" />
                 14-day free trial
               </div>
               <h1 className="text-4xl font-bold tracking-tight leading-tight">
                 Start optimizing your ads with AI
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Join thousands of marketers who use Ryze AI to automate their advertising and improve performance.
+                Join thousands of marketers who use LinkRunner AI to automate their advertising and improve performance.
               </p>
             </div>
 
@@ -139,7 +140,7 @@ export default function Register() {
             {/* Testimonial */}
             <div className="rounded-xl border border-border/50 bg-card/30 p-6">
               <p className="text-sm leading-relaxed italic text-muted-foreground">
-                "Ryze AI helped us improve our ROAS by 40% in the first month. The AI recommendations are spot-on and the automation saves us hours every week."
+                "LinkRunner AI helped us improve our ROAS by 40% in the first month. The AI recommendations are spot-on and the automation saves us hours every week."
               </p>
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
@@ -158,8 +159,8 @@ export default function Register() {
         <div className="flex items-center justify-center">
           <Card className="w-full max-w-md border-border/50 bg-card/50 backdrop-blur-sm">
             <CardHeader className="text-center space-y-4">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25">
-                <Sparkles className="h-7 w-7 text-primary-foreground" />
+              <div className="mx-auto flex justify-center">
+                <Logo withText={false} className="scale-150" />
               </div>
               <div className="space-y-1">
                 <CardTitle className="text-2xl font-bold">Create your account</CardTitle>

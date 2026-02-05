@@ -27,7 +27,7 @@ const features = [
     icon: Zap,
     title: 'Automated Execution',
     description:
-      'Not just suggestions - Ryze AI actually executes changes with smart guardrails you control.',
+      'Not just suggestions - Linkrunner.ai actually executes changes with smart guardrails you control.',
     color: 'text-purple-400',
     bgColor: 'bg-purple-400/10',
   },
@@ -85,7 +85,7 @@ const stats = [
 const testimonials = [
   {
     quote:
-      "Ryze AI saved us 20+ hours per week on campaign management while improving our ROAS by 63%.",
+      "Linkrunner.ai saved us 20+ hours per week on campaign management while improving our ROAS by 63%.",
     author: 'Sarah Chen',
     role: 'Head of Growth, TechStartup',
     avatar: 'SC',
@@ -128,7 +128,7 @@ export default function Landing() {
               <span className="text-blue-600">Autopilot</span>
             </h1>
             <p className="mb-8 text-lg text-muted-foreground sm:text-xl">
-              Ryze AI autonomously manages your advertising campaigns across all platforms.
+              Linkrunner.ai autonomously manages your advertising campaigns across all platforms.
               Real optimization, real execution, real results.
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
@@ -194,7 +194,7 @@ export default function Landing() {
               Everything You Need to Dominate Paid Advertising
             </h2>
             <p className="text-lg text-muted-foreground">
-              Ryze AI goes beyond basic optimization. We provide a complete suite of
+              Linkrunner.ai goes beyond basic optimization. We provide a complete suite of
               AI-powered tools that work 24/7.
             </p>
           </div>
@@ -226,7 +226,7 @@ export default function Landing() {
       <section className="bg-muted/30 py-20">
         <div className="container">
           <div className="mx-auto mb-16 max-w-2xl text-center">
-            <h2 className="mb-4 text-3xl font-bold sm:text-4xl">How Ryze AI Works</h2>
+            <h2 className="mb-4 text-3xl font-bold sm:text-4xl">How Linkrunner.ai Works</h2>
             <p className="text-lg text-muted-foreground">
               Get started in minutes and let AI transform your advertising
             </p>
@@ -276,7 +276,7 @@ export default function Landing() {
               Loved by Marketing Teams
             </h2>
             <p className="text-lg text-muted-foreground">
-              See what our customers have to say about Ryze AI
+              See what our customers have to say about Linkrunner.ai
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
@@ -319,7 +319,7 @@ export default function Landing() {
                 Ready to Transform Your Advertising?
               </h2>
               <p className="mx-auto mb-8 max-w-2xl text-lg opacity-90">
-                Join 2,000+ companies using Ryze AI to automate their ad management
+                Join 2,000+ companies using Linkrunner.ai to automate their advertising and meanagement
                 and improve ROAS.
               </p>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">

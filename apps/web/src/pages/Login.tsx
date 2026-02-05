@@ -3,12 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Sparkles, ArrowRight, BarChart3, Zap, Target } from 'lucide-react';
+import { Loader2, ArrowRight, BarChart3, Zap, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/toaster';
 import { useAuthStore } from '@/stores/auth-store';
+import { Logo } from '@/components/Logo';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -79,11 +80,9 @@ export default function Login() {
             {/* Logo and tagline */}
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25">
-                  <Sparkles className="h-6 w-6 text-primary-foreground" />
-                </div>
+                <Logo withText={false} className="scale-125 origin-left" />
                 <div>
-                  <h1 className="text-2xl font-bold tracking-tight">Ryze AI</h1>
+                  <h1 className="text-2xl font-bold tracking-tight">LinkRunner AI</h1>
                   <p className="text-xs uppercase tracking-widest text-muted-foreground">Advertising Platform</p>
                 </div>
               </div>
@@ -132,12 +131,12 @@ export default function Login() {
         <div className="flex items-center justify-center">
           <Card className="w-full max-w-md border-border/50 bg-card/50 backdrop-blur-sm">
             <CardHeader className="text-center space-y-4">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25">
-                <Sparkles className="h-7 w-7 text-primary-foreground" />
+              <div className="mx-auto flex justify-center">
+                <Logo withText={false} className="scale-150" />
               </div>
               <div className="space-y-1">
                 <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-                <CardDescription>Sign in to your Ryze AI account</CardDescription>
+                <CardDescription>Sign in to your Linkrunner.ai account</CardDescription>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">

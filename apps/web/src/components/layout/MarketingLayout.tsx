@@ -1,5 +1,5 @@
 import { Outlet, Link } from 'react-router-dom';
-import { TrendingUp } from 'lucide-react';
+import { Logo } from '@/components/Logo';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -15,8 +15,8 @@ export function MarketingLayout({ className }: MarketingLayoutProps) {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <TrendingUp className="h-6 w-6 text-primary" />
-            <span className="font-bold text-xl">Ryze AI</span>
+            <Logo withText={false} />
+            <span className="font-bold text-xl">Linkrunner.ai</span>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-6">
@@ -65,8 +65,8 @@ export function MarketingLayout({ className }: MarketingLayoutProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="col-span-2 md:col-span-1">
               <Link to="/" className="flex items-center space-x-2 mb-4">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                <span className="font-bold">Ryze AI</span>
+                <Logo withText={false} className="scale-90 origin-left" />
+                <span className="font-bold">Linkrunner.ai</span>
               </Link>
               <p className="text-sm text-muted-foreground">
                 AI-powered social media management platform for modern brands.
@@ -149,7 +149,7 @@ export function MarketingLayout({ className }: MarketingLayoutProps) {
 
           <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} Ryze AI. All rights reserved.
+              &copy; {new Date().getFullYear()} Linkrunner.ai. All rights reserved.
             </p>
             <div className="flex items-center space-x-4">
               <a
