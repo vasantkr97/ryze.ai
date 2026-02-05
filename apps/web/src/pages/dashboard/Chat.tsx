@@ -16,7 +16,6 @@ import {
   Paperclip,
   ArrowDown,
   Check,
-  Zap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -294,278 +293,275 @@ What would you like to explore today?`,
   };
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] flex-col">
-      {/* Chat Header */}
-      <div className="flex items-center justify-between border-b border-border/50 pb-4">
+    <div className="flex h-[calc(100vh-6rem)] flex-col bg-background/50 relative">
+      {/* Premium Header */}
+      <div className="relative z-10 flex flex-shrink-0 items-center justify-between border-b border-border/40 bg-background/80 px-6 py-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25">
-              <Sparkles className="h-6 w-6 text-primary-foreground" />
+            <div className="group flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 shadow-lg shadow-primary/5 transition-transform hover:scale-105">
+              <Sparkles className="h-6 w-6 text-primary" />
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-background">
-              <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
+            <div className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-background ring-2 ring-background">
+              <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
             </div>
           </div>
           <div>
-            <h1 className="text-xl font-semibold tracking-tight">Ryze AI Assistant</h1>
-            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <Zap className="h-3 w-3 text-primary" />
-              Your intelligent advertising copilot
-            </p>
+            <h1 className="text-lg font-bold tracking-tight text-foreground">Ryze AI Assistant</h1>
+            <div className="flex items-center gap-1.5">
+              <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <p className="text-xs font-medium text-muted-foreground">Always active & ready to help</p>
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-muted/50">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground border border-transparent hover:border-border/50">
             <RefreshCw className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
-      {/* Messages Container */}
-      <div
-        ref={messagesContainerRef}
-        onScroll={handleScroll}
-        className="flex-1 overflow-y-auto py-6"
-      >
-        <div className="mx-auto max-w-3xl space-y-6 px-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={cn(
-                'flex gap-4 animate-fade-up',
-                message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-              )}
-            >
-              {/* Avatar */}
+      {/* Messages Area */}
+      <div className="flex-1 min-h-0 flex flex-col bg-gradient-to-b from-transparent to-primary/5">
+        <div
+          ref={messagesContainerRef}
+          onScroll={handleScroll}
+          className="flex-1 overflow-y-auto px-4 py-6 scroll-smooth"
+        >
+          <div className="mx-auto max-w-3xl space-y-8 pb-4">
+            {messages.map((message) => (
               <div
+                key={message.id}
                 className={cn(
-                  'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl shadow-lg',
-                  message.role === 'assistant'
-                    ? 'bg-gradient-to-br from-primary to-primary/80 shadow-primary/20'
-                    : 'bg-gradient-to-br from-slate-600 to-slate-700 shadow-slate-900/20'
+                  'flex gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300',
+                  message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
                 )}
               >
-                {message.role === 'assistant' ? (
-                  <Bot className="h-5 w-5 text-primary-foreground" />
-                ) : (
-                  <User className="h-5 w-5 text-white" />
-                )}
-              </div>
-
-              {/* Message Bubble */}
-              <div
-                className={cn(
-                  'group relative max-w-[85%] space-y-2',
-                  message.role === 'user' ? 'items-end' : 'items-start'
-                )}
-              >
+                {/* Avatar */}
                 <div
                   className={cn(
-                    'rounded-2xl px-4 py-3',
+                    'flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl shadow-sm border',
                     message.role === 'assistant'
-                      ? 'bg-muted/50 text-foreground border border-border/50'
-                      : 'bg-gradient-to-br from-primary to-primary/90 text-primary-foreground shadow-lg shadow-primary/20'
+                      ? 'bg-card border-border/50 text-foreground shadow-sm'
+                      : 'bg-primary border-primary text-primary-foreground shadow-md shadow-primary/20'
                   )}
                 >
+                  {message.role === 'assistant' ? (
+                    <Bot className="h-5 w-5 text-primary" />
+                  ) : (
+                    <User className="h-5 w-5" />
+                  )}
+                </div>
+
+                {/* Message Content */}
+                <div className={cn('relative max-w-[80%]', message.role === 'user' ? 'items-end' : 'items-start')}>
                   <div
                     className={cn(
-                      'prose prose-sm max-w-none',
-                      message.role === 'user' && 'prose-invert',
-                      message.role === 'assistant' && 'prose-slate dark:prose-invert'
+                      'relative overflow-hidden rounded-2xl px-6 py-4 shadow-sm transition-all',
+                      message.role === 'assistant'
+                        ? 'bg-card border border-border/50 text-foreground'
+                        : 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
                     )}
                   >
-                    {message.content.split('\n').map((line, i) => {
-                      // Handle bold text
-                      const processedLine = line.replace(
-                        /\*\*(.*?)\*\*/g,
-                        '<strong class="font-semibold text-foreground">$1</strong>'
-                      );
-                      return (
-                        <p
-                          key={i}
-                          className={cn(
-                            'mb-1.5 last:mb-0 leading-relaxed',
-                            line.startsWith('-') && 'ml-4',
-                            line.startsWith('**') && 'mt-3 first:mt-0'
-                          )}
-                          dangerouslySetInnerHTML={{ __html: processedLine }}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Message Footer */}
-                <div
-                  className={cn(
-                    'flex items-center gap-2 px-1 text-xs text-muted-foreground',
-                    message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-                  )}
-                >
-                  <span className="opacity-70">{formatTime(message.timestamp)}</span>
-                  {message.role === 'assistant' && (
-                    <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 rounded-lg hover:bg-muted"
-                        onClick={() => handleCopy(message.id, message.content)}
-                      >
-                        {copiedId === message.id ? (
-                          <Check className="h-3.5 w-3.5 text-emerald-500" />
-                        ) : (
-                          <Copy className="h-3.5 w-3.5" />
-                        )}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className={cn(
-                          'h-7 w-7 rounded-lg hover:bg-muted',
-                          message.feedback === 'positive' && 'text-emerald-500 bg-emerald-500/10'
-                        )}
-                        onClick={() => handleFeedback(message.id, 'positive')}
-                      >
-                        <ThumbsUp className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className={cn(
-                          'h-7 w-7 rounded-lg hover:bg-muted',
-                          message.feedback === 'negative' && 'text-red-500 bg-red-500/10'
-                        )}
-                        onClick={() => handleFeedback(message.id, 'negative')}
-                      >
-                        <ThumbsDown className="h-3.5 w-3.5" />
-                      </Button>
+                    <div
+                      className={cn(
+                        'prose prose-sm max-w-none',
+                        message.role === 'user' && 'prose-invert',
+                        message.role === 'assistant' && 'prose-slate dark:prose-invert'
+                      )}
+                    >
+                      {message.content.split('\n').map((line, i) => {
+                        const processedLine = line.replace(
+                          /\*\*(.*?)\*\*/g,
+                          message.role === 'assistant' 
+                            ? '<strong class="font-bold text-foreground">$1</strong>' 
+                            : '<strong class="font-bold text-white">$1</strong>'
+                        );
+                        return (
+                          <p
+                            key={i}
+                            className={cn(
+                              'mb-2 last:mb-0 leading-relaxed tracking-wide',
+                              line.startsWith('-') && 'ml-4',
+                              line.startsWith('**') && 'mt-4 first:mt-0'
+                            )}
+                            dangerouslySetInnerHTML={{ __html: processedLine }}
+                          />
+                        );
+                      })}
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-
-          {/* Typing Indicator */}
-          {isTyping && (
-            <div className="flex gap-4 animate-fade-up">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/20">
-                <Bot className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <div className="rounded-2xl bg-muted/50 border border-border/50 px-4 py-3">
-                <div className="flex items-center gap-1.5">
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary/60 [animation-delay:-0.3s]" />
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary/60 [animation-delay:-0.15s]" />
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary/60" />
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
-      </div>
-
-      {/* Scroll to Bottom Button */}
-      {showScrollButton && (
-        <div className="absolute bottom-36 left-1/2 z-10 -translate-x-1/2">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="rounded-full shadow-lg border border-border/50 bg-card/90 backdrop-blur-sm hover:bg-card"
-            onClick={scrollToBottom}
-          >
-            <ArrowDown className="mr-1.5 h-3.5 w-3.5" />
-            New messages
-          </Button>
-        </div>
-      )}
-
-      {/* Suggested Prompts */}
-      {messages.length === 1 && (
-        <div className="border-t border-border/50 py-5">
-          <div className="mx-auto max-w-3xl px-4">
-            <p className="mb-4 text-sm font-medium text-muted-foreground">
-              Get started with a question
-            </p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {suggestedPrompts.map((prompt) => (
-                <button
-                  key={prompt.text}
-                  onClick={() => handlePromptClick(prompt.text)}
-                  className={cn(
-                    'group flex items-center gap-3 rounded-xl border border-border/50 bg-card/50 p-4 text-left transition-all duration-200',
-                    'hover:border-primary/30 hover:bg-muted/50 hover:shadow-lg'
-                  )}
-                >
-                  <div className={cn(
-                    'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br transition-transform group-hover:scale-110',
-                    prompt.gradient
-                  )}>
-                    <prompt.icon className={cn('h-5 w-5', prompt.iconColor)} />
                   </div>
-                  <span className="text-sm font-medium leading-tight">{prompt.text}</span>
-                </button>
-              ))}
-            </div>
+
+                  {/* Message Actions */}
+                  <div
+                    className={cn(
+                      'mt-2 flex items-center gap-2 px-1',
+                      message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
+                    )}
+                  >
+                    <span className="text-[10px] font-medium text-muted-foreground/60">
+                      {formatTime(message.timestamp)}
+                    </span>
+                    {message.role === 'assistant' && (
+                      <div className="flex items-center gap-1 opacity-0 transition-all duration-200 group-hover:opacity-100">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 rounded-md hover:bg-muted hover:text-foreground text-muted-foreground"
+                          onClick={() => handleCopy(message.id, message.content)}
+                        >
+                          {copiedId === message.id ? (
+                            <Check className="h-3 w-3 text-emerald-500" />
+                          ) : (
+                            <Copy className="h-3 w-3" />
+                          )}
+                        </Button>
+                        <div className="h-3 w-[1px] bg-border/50" />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={cn(
+                            'h-6 w-6 rounded-md hover:bg-muted hover:text-foreground text-muted-foreground',
+                            message.feedback === 'positive' && 'text-emerald-500 bg-emerald-500/10'
+                          )}
+                          onClick={() => handleFeedback(message.id, 'positive')}
+                        >
+                          <ThumbsUp className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={cn(
+                            'h-6 w-6 rounded-md hover:bg-muted hover:text-foreground text-muted-foreground',
+                            message.feedback === 'negative' && 'text-red-500 bg-red-500/10'
+                          )}
+                          onClick={() => handleFeedback(message.id, 'negative')}
+                        >
+                          <ThumbsDown className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {isTyping && (
+              <div className="flex gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-card border border-border/50 shadow-sm">
+                  <Bot className="h-5 w-5 text-primary" />
+                </div>
+                <div className="rounded-2xl bg-card border border-border/50 px-5 py-4 shadow-sm">
+                  <div className="flex items-center gap-1.5">
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]" />
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:-0.15s]" />
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-primary" />
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Suggested Prompts (Inline) */}
+            {messages.length === 1 && (
+              <div className="py-2">
+                <p className="mb-4 text-sm font-medium text-muted-foreground px-1">
+                  Suggested topics to get started:
+                </p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {suggestedPrompts.map((prompt, i) => (
+                    <button
+                      key={prompt.text}
+                      onClick={() => handlePromptClick(prompt.text)}
+                      className={cn(
+                        'group flex items-center gap-3 rounded-xl border border-border/40 bg-card/40 p-3 text-left backdrop-blur-sm transition-all duration-300',
+                        'hover:border-primary/50 hover:bg-card hover:shadow-md hover:-translate-y-0.5',
+                        'animate-in fade-in slide-in-from-bottom-2 fill-mode-backwards'
+                      )}
+                      style={{ animationDelay: `${i * 100}ms` }}
+                    >
+                      <div className={cn(
+                        'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br transition-all duration-300 group-hover:scale-110',
+                        prompt.gradient
+                      )}>
+                        <prompt.icon className={cn('h-4 w-4', prompt.iconColor)} />
+                      </div>
+                      <div>
+                        <h3 className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">{prompt.category.charAt(0).toUpperCase() + prompt.category.slice(1)}</h3>
+                        <p className="text-xs text-muted-foreground line-clamp-1">{prompt.text}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            <div ref={messagesEndRef} className="h-4" />
           </div>
         </div>
-      )}
 
-      {/* Input Area */}
-      <div className="border-t border-border/50 bg-card/30 backdrop-blur-sm p-4">
-        <div className="mx-auto max-w-3xl">
-          <div className="relative flex items-end gap-3">
-            <div className="relative flex-1">
-              <textarea
-                ref={inputRef}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask me anything about your campaigns..."
-                rows={1}
-                className={cn(
-                  'w-full resize-none rounded-xl border-2 border-border/50 bg-background px-4 py-3 pr-24 text-sm',
-                  'placeholder:text-muted-foreground/60',
-                  'focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'transition-all duration-200'
-                )}
-                disabled={isTyping}
-                style={{ minHeight: '48px', maxHeight: '120px' }}
-              />
-              <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                >
-                  <Paperclip className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                >
-                  <Mic className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+        {/* Scroll Button */}
+        {showScrollButton && (
+          <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 animate-in fade-in slide-in-from-bottom-4">
             <Button
-              onClick={() => handleSendMessage(inputValue)}
-              disabled={!inputValue.trim() || isTyping}
-              className={cn(
-                'h-12 w-12 rounded-xl transition-all duration-200',
-                inputValue.trim() && !isTyping
-                  ? 'btn-premium shadow-lg'
-                  : 'bg-muted text-muted-foreground'
-              )}
+              variant="secondary"
+              size="sm"
+              className="rounded-full shadow-lg border border-border/50 bg-background/90 backdrop-blur-md hover:bg-background pl-3 pr-4"
+              onClick={scrollToBottom}
             >
-              <Send className="h-5 w-5" />
+              <ArrowDown className="mr-2 h-3.5 w-3.5 text-primary" />
+              <span className="text-xs font-medium">New messages</span>
             </Button>
           </div>
-          <p className="mt-3 text-center text-xs text-muted-foreground/70">
-            Ryze AI analyzes your real campaign data to provide personalized insights and recommendations.
+        )}
+      </div>
+
+      {/* Input Area */}
+      <div className="flex-shrink-0 border-t border-border/40 bg-background/80 backdrop-blur-xl p-4 supports-[backdrop-filter]:bg-background/60">
+        <div className="mx-auto max-w-3xl">
+          <div className="relative flex items-end gap-2 rounded-2xl border border-border/50 bg-card/50 p-2 shadow-sm ring-1 ring-inset ring-transparent transition-all focus-within:border-primary/30 focus-within:ring-primary/10 focus-within:bg-card">
+            <div className="flex items-center gap-1 self-end pb-2 pl-2">
+               <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+                 <Paperclip className="h-5 w-5" />
+               </Button>
+            </div>
+            
+            <textarea
+              ref={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask anything about your campaigns, audiences, or creatives..."
+              rows={1}
+              className={cn(
+                'flex-1 resize-none bg-transparent px-2 py-3.5 text-sm leading-relaxed text-foreground',
+                'placeholder:text-muted-foreground/50',
+                'focus:outline-none',
+                'disabled:cursor-not-allowed disabled:opacity-50',
+                'max-h-[200px] min-h-[52px]'
+              )}
+              disabled={isTyping}
+            />
+            
+            <div className="flex items-center gap-1 self-end pb-2 pr-2">
+               <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+                 <Mic className="h-5 w-5" />
+               </Button>
+               <div className="w-px h-5 bg-border/50 mx-1" />
+               <Button
+                onClick={() => handleSendMessage(inputValue)}
+                disabled={!inputValue.trim() || isTyping}
+                className={cn(
+                  'h-9 w-9 rounded-full transition-all duration-300 shadow-sm',
+                  inputValue.trim() && !isTyping
+                    ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 hover:shadow-lg hover:shadow-primary/20'
+                    : 'bg-muted text-muted-foreground'
+                )}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <p className="mt-3 text-center text-[10px] font-medium text-muted-foreground/50">
+            Ryze AI combines real-time data with predictive models. Results may vary.
           </p>
         </div>
       </div>

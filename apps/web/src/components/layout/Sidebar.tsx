@@ -170,7 +170,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="w-full justify-between text-left font-normal h-11 px-3 bg-muted/30 hover:bg-muted/50 border border-border/50"
+                className="w-full justify-between text-left font-normal h-11 px-3 bg-muted/30 hover:bg-accent/10 hover:text-foreground border border-border/50 text-foreground"
               >
                 <div className="flex items-center gap-2.5 truncate">
                   <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 ring-1 ring-primary/20">

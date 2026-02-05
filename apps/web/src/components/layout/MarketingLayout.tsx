@@ -1,5 +1,5 @@
 import { Outlet, Link } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
+import { TrendingUp } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -15,7 +15,7 @@ export function MarketingLayout({ className }: MarketingLayoutProps) {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <Sparkles className="h-6 w-6 text-primary" />
+            <TrendingUp className="h-6 w-6 text-primary" />
             <span className="font-bold text-xl">Ryze AI</span>
           </Link>
 
@@ -65,7 +65,7 @@ export function MarketingLayout({ className }: MarketingLayoutProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="col-span-2 md:col-span-1">
               <Link to="/" className="flex items-center space-x-2 mb-4">
-                <Sparkles className="h-5 w-5 text-primary" />
+                <TrendingUp className="h-5 w-5 text-primary" />
                 <span className="font-bold">Ryze AI</span>
               </Link>
               <p className="text-sm text-muted-foreground">
