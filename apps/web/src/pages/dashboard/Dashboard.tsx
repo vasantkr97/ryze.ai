@@ -169,7 +169,7 @@ export default function Dashboard() {
             Welcome back! Here's an overview of your ad performance.
           </p>
         </div>
-        <Button asChild className="btn-premium w-fit">
+        <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 w-fit">
           <Link to="/dashboard/chat">
             <Sparkles className="mr-2 h-4 w-4" />
             Ask AI for Insights
@@ -212,8 +212,8 @@ export default function Dashboard() {
                     metric.trend === 'up' && metric.title !== 'CPA'
                       ? 'bg-emerald-500/10 text-emerald-500'
                       : metric.trend === 'down' && metric.title === 'CPA'
-                      ? 'bg-emerald-500/10 text-emerald-500'
-                      : 'bg-red-500/10 text-red-500'
+                        ? 'bg-emerald-500/10 text-emerald-500'
+                        : 'bg-red-500/10 text-red-500'
                   )}
                 >
                   {metric.trend === 'up' ? (
@@ -336,8 +336,8 @@ export default function Dashboard() {
                     rec.priority === 'high'
                       ? 'bg-red-500/10 text-red-400 group-hover:bg-red-500/20'
                       : rec.priority === 'medium'
-                      ? 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20'
-                      : 'bg-primary/10 text-primary group-hover:bg-primary/20'
+                        ? 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20'
+                        : 'bg-primary/10 text-primary group-hover:bg-primary/20'
                   )}
                 >
                   <rec.icon className="h-5 w-5" />

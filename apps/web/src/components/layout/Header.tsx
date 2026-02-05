@@ -133,7 +133,7 @@ export function Header({ className, onMenuClick }: HeaderProps) {
             <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-xl hover:bg-muted/50">
               <Bell className="h-[18px] w-[18px]" />
               {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
+                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-semibold text-white">
                   {unreadCount}
                 </span>
               )}
@@ -206,7 +206,7 @@ export function Header({ className, onMenuClick }: HeaderProps) {
             <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 ml-1">
               <Avatar className="h-8 w-8 ring-2 ring-border/50">
                 <AvatarImage src="/avatars/user.jpg" alt="User" />
-                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-xs font-semibold">
+                <AvatarFallback className="bg-gradient-to-br from-gray-600 to-gray-700 text-white text-xs font-semibold">
                   JD
                 </AvatarFallback>
               </Avatar>
@@ -218,7 +218,7 @@ export function Header({ className, onMenuClick }: HeaderProps) {
               <div className="flex items-center gap-3">
                 <Avatar className="h-10 w-10">
                   <AvatarImage src="/avatars/user.jpg" alt="User" />
-                  <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-sm font-semibold">
+                  <AvatarFallback className="bg-gradient-to-br from-gray-600 to-gray-700 text-white text-sm font-semibold">
                     JD
                   </AvatarFallback>
                 </Avatar>

@@ -20,36 +20,48 @@ const features = [
     title: 'AI-Powered Optimization',
     description:
       'Our AI analyzes millions of data points to automatically optimize your campaigns for maximum ROAS.',
+    color: 'text-cyan-400',
+    bgColor: 'bg-cyan-400/10',
   },
   {
     icon: Zap,
     title: 'Automated Execution',
     description:
       'Not just suggestions - Ryze AI actually executes changes with smart guardrails you control.',
+    color: 'text-purple-400',
+    bgColor: 'bg-purple-400/10',
   },
   {
     icon: TrendingUp,
     title: 'Predictive Analytics',
     description:
       'Predict performance drops 24-72 hours before they happen and take proactive action.',
+    color: 'text-indigo-400',
+    bgColor: 'bg-indigo-400/10',
   },
   {
     icon: Target,
     title: 'Competitor Intelligence',
     description:
       'Track competitor ads, strategies, and market positioning to stay ahead.',
+    color: 'text-pink-400',
+    bgColor: 'bg-pink-400/10',
   },
   {
     icon: BarChart3,
     title: 'Full Funnel Tracking',
     description:
       'Track complete audience journeys from awareness to advocacy with multi-touch attribution.',
+    color: 'text-violet-400',
+    bgColor: 'bg-violet-400/10',
   },
   {
     icon: MessageSquare,
     title: 'Conversational AI',
     description:
       'Ask questions in natural language and get instant insights about your campaigns.',
+    color: 'text-blue-400',
+    bgColor: 'bg-blue-400/10',
   },
 ];
 
@@ -113,7 +125,7 @@ export default function Landing() {
             </div>
             <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Your Ads on{' '}
-              <span className="gradient-text">Autopilot</span>
+              <span className="text-blue-600">Autopilot</span>
             </h1>
             <p className="mb-8 text-lg text-muted-foreground sm:text-xl">
               Ryze AI autonomously manages your advertising campaigns across all platforms.
@@ -197,8 +209,8 @@ export default function Landing() {
               >
                 <Card className="h-full transition-shadow hover:shadow-lg">
                   <CardContent className="p-6">
-                    <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3">
-                      <feature.icon className="h-6 w-6 text-primary" />
+                    <div className={`mb-4 inline-flex rounded-lg p-3 ${feature.bgColor}`}>
+                      <feature.icon className={`h-6 w-6 ${feature.color}`} />
                     </div>
                     <h3 className="mb-2 text-xl font-semibold">{feature.title}</h3>
                     <p className="text-muted-foreground">{feature.description}</p>
@@ -245,7 +257,7 @@ export default function Landing() {
                 viewport={{ once: true }}
                 className="text-center"
               >
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-600 text-xl font-bold text-white shadow-lg shadow-purple-900/20">
                   {item.step}
                 </div>
                 <h3 className="mb-2 text-xl font-semibold">{item.title}</h3>
@@ -280,7 +292,7 @@ export default function Landing() {
                   <CardContent className="p-6">
                     <p className="mb-6 text-lg">&ldquo;{testimonial.quote}&rdquo;</p>
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600 text-sm font-semibold text-white shadow-md shadow-purple-900/20">
                         {testimonial.avatar}
                       </div>
                       <div>

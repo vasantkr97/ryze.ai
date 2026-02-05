@@ -18,7 +18,7 @@ export function DashboardLayout({ className }: DashboardLayoutProps) {
   };
 
   return (
-    <div className={cn('min-h-screen flex bg-background', className)}>
+    <div className={cn('h-screen flex bg-background overflow-hidden', className)}>
       {/* Desktop Sidebar */}
       <div className="hidden md:flex">
         <Sidebar

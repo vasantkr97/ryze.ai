@@ -37,7 +37,7 @@ const journeyStages = [
     icon: Eye,
     users: 125000,
     value: 125000,
-    fill: '#3b9ea8',
+    fill: '#6b7280',
     conversionRate: null,
     avgTimeInStage: '0 days',
     topChannels: ['Meta Ads', 'Google Display', 'TikTok'],
@@ -48,7 +48,7 @@ const journeyStages = [
     icon: MousePointer,
     users: 45000,
     value: 45000,
-    fill: '#4db6c4',
+    fill: '#71717a',
     conversionRate: 36,
     avgTimeInStage: '2.3 days',
     topChannels: ['Google Search', 'Retargeting', 'Email'],
@@ -59,7 +59,7 @@ const journeyStages = [
     icon: ShoppingCart,
     users: 12500,
     value: 12500,
-    fill: '#64b5a0',
+    fill: '#78716c',
     conversionRate: 27.8,
     avgTimeInStage: '5.1 days',
     topChannels: ['Google Search', 'Direct', 'Referral'],
@@ -70,7 +70,7 @@ const journeyStages = [
     icon: CreditCard,
     users: 3750,
     value: 3750,
-    fill: '#6bc98f',
+    fill: '#737373',
     conversionRate: 30,
     avgTimeInStage: '1.8 days',
     topChannels: ['Direct', 'Email', 'Retargeting'],
@@ -81,7 +81,7 @@ const journeyStages = [
     icon: Heart,
     users: 890,
     value: 890,
-    fill: '#7fd47e',
+    fill: '#6b7280',
     conversionRate: 23.7,
     avgTimeInStage: '14 days',
     topChannels: ['Email', 'Organic Social', 'Referral'],
@@ -269,7 +269,12 @@ export default function Journeys() {
           <div className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <FunnelChart>
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip 
+                  content={<CustomTooltip />} 
+                  wrapperStyle={{ zIndex: 1000, pointerEvents: 'none' }}
+                  position={{ x: 0, y: 0 }}
+                  allowEscapeViewBox={{ x: true, y: true }}
+                />
                 <Funnel
                   dataKey="value"
                   data={journeyStages}
