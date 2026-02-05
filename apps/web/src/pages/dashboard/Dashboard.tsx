@@ -21,7 +21,6 @@ import {
   ComposedChart,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
